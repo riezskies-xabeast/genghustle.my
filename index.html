@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GengHustle.MY - IIUM Pagoh Campus Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-header {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-20 md:pb-12">
+
+    <!-- ==================== TOP NAVIGATION HEADER ==================== -->
+    <header class="sticky top-0 z-40 glass-header border-b border-slate-200/80 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 gap-4">
+                
+                <!-- 1. Branding & SVG Logo Placeholder -->
+                <div class="flex items-center gap-3">
+                    <a href="#" onclick="showPage('home'); return false;" class="flex items-center gap-2.5 group">
+                        <img src="/assets/logo-placeholder.svg" 
+                             onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23059669%22/><text x=%2250%22 y=%2266%22 font-family=%22Arial,sans-serif%22 font-size=%2252%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>G</text></svg>'" 
+                             alt="Website Logo" 
+                             class="w-10 h-10 rounded-xl object-contain bg-emerald-600 shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform" />
+                        <div>
+                            <span class="font-extrabold text-lg text-slate-900 tracking-tight block leading-none">GengHustle<span class="text-emerald-600">.MY</span></span>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">IIUM Pagoh Hub</span>
+                                <span id="dbStatusBadge" class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">Local Mode</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Global Search & Block Filter (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-6 items-center gap-2">
+                    <div class="relative flex-1">
+                        <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" id="desktopSearchInput" oninput="handleSearch(this.value)" placeholder="Search food, runner, carpool, service..." class="w-full pl-10 pr-4 py-2 bg-slate-100 hover:bg-slate-200/70 focus:bg-white text-sm rounded-full border border-transparent focus:border-emerald-500 focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all">
+                    </div>
+                    <!-- Location Block Filter -->
+                    <select id="desktopBlockFilter" onchange="handleBlockFilter(this.value)" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200/70 text-xs font-bold text-slate-700 rounded-full border border-transparent focus:border-emerald-500 focus:bg-white focus:outline-none cursor-pointer">
+                        <option value="All">All Blocks (1-11)</option>
+                        <option value="Block 1">Block 1</option>
+                        <option value="Block 2">Block 2</option>
+                        <option value="Block 3">Block 3</option>
+                        <option value="Block 4">Block 4</option>
+                        <option value="Block 5">Block 5</option>
+                        <option value="Block 6">Block 6</option>
+                        <option value="Block 7">Block 7</option>
+                        <option value="Block 8">Block 8</option>
+                        <option value="Block 9">Block 9</option>
+                        <option value="Block 10">Block 10</option>
+                        <option value="Block 11">Block 11</option>
+                    </select>
+                </div>
+
+                <!-- Auth / Profile Buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openModal('historyModal')" class="p-2.5 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors relative" title="Recently Contacted">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                        <span id="historyBadgeDot" class="hidden absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
+                    </button>
+
+                    <!-- Dynamic Profile / Admin / Register State -->
+                    <div id="navAuthArea" class="flex items-center gap-2"></div>
+                </div>
+
+            </div>
+
+            <!-- Mobile Search & Block Bar -->
+            <div class="md:hidden pb-3 flex gap-2">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                    <input type="text" id="mobileSearchInput" oninput="handleSearch(this.value)" placeholder="Search items, block, seller..." class="w-full pl-10 pr-3 py-2 bg-slate-100 focus:bg-white text-sm rounded-full border border-transparent focus:border-emerald-500 focus:outline-none">
+                </div>
+                <select id="mobileBlockFilter" onchange="handleBlockFilter(this.value)" class="px-3 py-2 bg-slate-100 text-xs font-bold text-slate-700 rounded-full border border-transparent focus:border-emerald-500 focus:bg-white focus:outline-none">
+                    <option value="All">All Blocks</option>
+                    <option value="Block 1">Block 1</option>
+                    <option value="Block 2">Block 2</option>
+                    <option value="Block 3">Block 3</option>
+                    <option value="Block 4">Block 4</option>
+                    <option value="Block 5">Block 5</option>
+                    <option value="Block 6">Block 6</option>
+                    <option value="Block 7">Block 7</option>
+                    <option value="Block 8">Block 8</option>
+                    <option value="Block 9">Block 9</option>
+                    <option value="Block 10">Block 10</option>
+                    <option value="Block 11">Block 11</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTAINER ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+
+        <!-- ==================== HOME PAGE ==================== -->
+        <section id="page-home" class="space-y-8">
+            
+            <!-- 3. DYNAMIC FULL-WIDTH HERO CAROUSEL -->
+            <div class="relative overflow-hidden rounded-3xl bg-slate-900 text-white shadow-2xl min-h-[260px] sm:min-h-[320px] flex items-center">
+                <!-- Slides Container -->
+                <div id="heroCarouselTrack" class="w-full h-full"></div>
+
+                <!-- Prev / Next Controls -->
+                <button onclick="prevHeroSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur transition-all">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="nextHeroSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur transition-all">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Carousel Dots -->
+                <div id="heroCarouselDots" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2"></div>
+            </div>
+
+            <!-- 1. CATEGORY SECTION NAVIGATION (SVG Placeholders + Pre-Loved) -->
+            <div id="categories" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Browse Categories</h2>
+                        <p class="text-xs text-slate-500">Find exactly what you need across Block 1 to Block 11</p>
+                    </div>
+                </div>
+
+                <!-- Category Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                    
+                    <button onclick="filterCategory('Food & Bites')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/food-bites.svg" alt="Food & Bites" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Food & Bites</h3>
+                        <p class="text-[11px] text-slate-500">Meals, Snacks & Drinks</p>
+                    </button>
+
+                    <button onclick="filterCategory('Runners')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/runners.svg" alt="Runners" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Runners</h3>
+                        <p class="text-[11px] text-slate-500">Parcel & Food pickup</p>
+                    </button>
+
+                    <button onclick="filterCategory('Transports')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/transports.svg" alt="Transports" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Transports</h3>
+                        <p class="text-[11px] text-slate-500">Carpool & Rides</p>
+                    </button>
+
+                    <button onclick="filterCategory('Products')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/products.svg" alt="Products" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Products</h3>
+                        <p class="text-[11px] text-slate-500">Arts, Accessories etc.</p>
+                    </button>
+
+                    <button onclick="filterCategory('Services')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/services.svg" alt="Services" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Services</h3>
+                        <p class="text-[11px] text-slate-500">Printing, Laundry etc.</p>
+                    </button>
+
+                    <button onclick="filterCategory('Pre-Loved')" class="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform overflow-hidden">
+                            <img src="/assets/icons/pre-loved.svg" alt="Pre-Loved" class="w-6 h-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-6 h-6 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm">Pre-Loved</h3>
+                        <p class="text-[11px] text-slate-500">Secondhand Items</p>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- ACTIVE CAMPUS ENTREPRENEURS -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Active Studentpreneurs</h2>
+                        <p class="text-xs text-slate-500">Live campus vendors operating across Blocks 1 – 11</p>
+                    </div>
+                    <button onclick="filterCategory('All')" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+                        View All <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Feed Grid -->
+                <div id="homeBusinessGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+        </section>
+
+        <!-- ==================== CATEGORY / LISTINGS PAGE ==================== -->
+        <section id="page-listings" class="hidden space-y-6">
+            
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="showPage('home')" class="text-xs font-bold text-slate-400 hover:text-slate-700 flex items-center gap-1">
+                            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Home
+                        </button>
+                        <span class="text-slate-300">/</span>
+                        <span id="currentCategoryBadge" class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md">All</span>
+                    </div>
+                    <h2 id="currentCategoryTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">All Campus Listings</h2>
+                </div>
+
+                <!-- Quick Filter Pill Buttons -->
+                <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+                    <button onclick="filterCategory('All')" data-cat="All" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all">All</button>
+                    <button onclick="filterCategory('Food & Bites')" data-cat="Food & Bites" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Food & Bites</button>
+                    <button onclick="filterCategory('Runners')" data-cat="Runners" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Runners</button>
+                    <button onclick="filterCategory('Transports')" data-cat="Transports" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Transports</button>
+                    <button onclick="filterCategory('Products')" data-cat="Products" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Products</button>
+                    <button onclick="filterCategory('Services')" data-cat="Services" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Services</button>
+                    <button onclick="filterCategory('Pre-Loved')" data-cat="Pre-Loved" class="cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Pre-Loved</button>
+                </div>
+            </div>
+
+            <!-- Listings Feed -->
+            <div id="listingsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        </section>
+
+        <!-- ==================== VENDOR DASHBOARD / USER SETTINGS PAGE ==================== -->
+        <section id="page-dashboard" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="showPage('home')" class="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Directory
+                </button>
+                <div class="flex items-center gap-2">
+                    <button id="dashAdminSwitchBtn" onclick="showPage('admin')" class="hidden text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg flex items-center gap-1">
+                        <i data-lucide="shield" class="w-3.5 h-3.5"></i> Admin Panel
+                    </button>
+                    <button onclick="handleLogout()" class="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 transition-colors">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Log Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- Vendor Header Card -->
+            <div class="bg-gradient-to-r from-emerald-800 to-teal-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <div class="flex items-center gap-4">
+                    <img id="dashVendorLogo" src="" alt="Vendor Logo" class="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 bg-slate-800">
+                    <div>
+                        <span id="dashVendorCategory" class="text-xs text-emerald-300 font-bold uppercase tracking-wider">Category</span>
+                        <h2 id="dashVendorName" class="text-2xl font-bold">My Store</h2>
+                        <p id="dashVendorBlock" class="text-xs text-slate-300">Block 1 • IIUM Pagoh</p>
+                    </div>
+                </div>
+
+                <!-- Live Status Toggle Switch -->
+                <div class="bg-white/10 backdrop-blur border border-white/10 p-4 rounded-2xl flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+                    <div>
+                        <p class="text-xs text-slate-300">Live Operating Status</p>
+                        <p id="dashStatusLabel" class="text-sm font-bold text-emerald-400">🟢 Available</p>
+                    </div>
+                    <button onclick="toggleVendorStatus()" class="px-4 py-2 bg-white text-slate-900 font-bold text-xs rounded-xl hover:bg-emerald-400 transition-colors shadow-sm active:scale-95">
+                        Toggle Status
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-6">
+                <!-- Update Store & Schedule Settings (7 cols) -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-5 h-5 text-emerald-600"></i> Store Settings & Listing Configuration
+                    </h3>
+
+                    <form onsubmit="handleUpdateVendorDetails(event)" class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Business Name</label>
+                                <input type="text" id="dashInputName" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Block Location</label>
+                                <select id="dashInputBlock" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                                    <option value="Block 1">Block 1</option>
+                                    <option value="Block 2">Block 2</option>
+                                    <option value="Block 3">Block 3</option>
+                                    <option value="Block 4">Block 4</option>
+                                    <option value="Block 5">Block 5</option>
+                                    <option value="Block 6">Block 6</option>
+                                    <option value="Block 7">Block 7</option>
+                                    <option value="Block 8">Block 8</option>
+                                    <option value="Block 9">Block 9</option>
+                                    <option value="Block 10">Block 10</option>
+                                    <option value="Block 11">Block 11</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Category</label>
+                                <select id="dashInputCategory" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                                    <option value="Food & Bites">Food & Bites</option>
+                                    <option value="Runners">Runners</option>
+                                    <option value="Transports">Transports</option>
+                                    <option value="Products">Products</option>
+                                    <option value="Services">Services</option>
+                                    <option value="Pre-Loved">Pre-Loved</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Main Item / Vehicle / Service</label>
+                                <input type="text" id="dashInputPrimary" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- 5. Price Standardization & Unit Classifier -->
+                        <div class="grid sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Price (RM)</label>
+                                <input type="number" step="0.01" min="0" id="dashInputPrice" onblur="formatDecimalInput(this)" required placeholder="5.00" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pricing Unit</label>
+                                <select id="dashInputUnit" onchange="toggleCustomUnitInput('dashInputUnit', 'dashCustomUnitWrap')" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                                    <option value="pack">pack</option>
+                                    <option value="piece">piece</option>
+                                    <option value="page">page</option>
+                                    <option value="pax">pax</option>
+                                    <option value="Skip">Skip (No unit)</option>
+                                    <option value="Others">Others (Specify)</option>
+                                </select>
+                            </div>
+                            <div id="dashCustomUnitWrap" class="hidden">
+                                <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Custom Unit</label>
+                                <input type="text" id="dashInputCustomUnit" placeholder="e.g. hour, trip, kg" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Additional Info (Plate No / Pickup Point / Delivery Fee)</label>
+                            <input type="text" id="dashInputExtra" required class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                        </div>
+
+                        <!-- 6. Operating Schedule Configuration (Days + 24h Time) -->
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Operating Days (Monday – Sunday)</label>
+                            <div id="dashDaysContainer" class="flex flex-wrap gap-1.5">
+                                <label class="cursor-pointer"><input type="checkbox" value="Mon" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Mon</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Tue" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Tue</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Wed" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Wed</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Thu" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Thu</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Fri" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Fri</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Sat" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Sat</span></label>
+                                <label class="cursor-pointer"><input type="checkbox" value="Sun" class="dash-day-cb sr-only peer"><span class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block transition-all">Sun</span></label>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 pt-1">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Opening Time (24h)</label>
+                                    <input type="time" id="dashOpenTime" required value="08:00" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold focus:border-emerald-500 focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Closing Time (24h)</label>
+                                    <input type="time" id="dashCloseTime" required value="22:00" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold focus:border-emerald-500 focus:outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-md">
+                            Save Store & Listing Changes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Banners, Multi-Product Images & Account Deletion (5 cols) -->
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <!-- 3. Promotional Banner & Remove Banner Action -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <i data-lucide="image" class="w-5 h-5 text-emerald-600"></i> Promotional Hero Banner
+                            </h3>
+                            <button type="button" id="removeBannerBtn" onclick="handleRemoveBanner()" class="text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1 rounded-lg transition-colors">
+                                Remove Banner
+                            </button>
+                        </div>
+                        
+                        <div class="relative h-36 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center">
+                            <img id="dashPosterPreview" src="" alt="Banner Preview" class="w-full h-full object-cover hidden">
+                            <span id="dashNoBannerText" class="text-xs text-slate-400 font-medium">No active promotional banner</span>
+                        </div>
+
+                        <input type="file" id="posterFileInput" accept="image/*" class="hidden" onchange="handlePosterFileUpload(event)">
+                        
+                        <div onclick="document.getElementById('posterFileInput').click()" class="border-2 border-dashed border-slate-200 rounded-2xl p-3.5 text-center hover:border-emerald-500 hover:bg-emerald-50/30 transition-all cursor-pointer">
+                            <i data-lucide="upload-cloud" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i>
+                            <p class="text-xs font-bold text-slate-700">Upload / Replace Hero Banner</p>
+                            <p class="text-[10px] text-slate-400">Appears in the homepage hero carousel</p>
+                        </div>
+                    </div>
+
+                    <!-- 5. Multi-Image Product Gallery Manager -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <i data-lucide="images" class="w-5 h-5 text-emerald-600"></i> Product Gallery Images
+                            </h3>
+                            <button type="button" onclick="document.getElementById('dashMultiImgInput').click()" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3 py-1 rounded-lg">
+                                + Add Photos
+                            </button>
+                        </div>
+                        <input type="file" id="dashMultiImgInput" accept="image/*" multiple class="hidden" onchange="handleDashMultiImageUpload(event)">
+                        <div id="dashProductGalleryGrid" class="grid grid-cols-3 gap-2"></div>
+                    </div>
+
+                    <!-- 4. Self-Service Account Deletion -->
+                    <div class="bg-rose-50/60 rounded-2xl border border-rose-200 p-5 space-y-3">
+                        <h4 class="text-sm font-bold text-rose-900 flex items-center gap-1.5">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i> Danger Zone
+                        </h4>
+                        <p class="text-xs text-rose-700/80">Permanently delete your studentpreneur account, store listing, and promotional banners.</p>
+                        <button type="button" onclick="handleSelfDeleteAccount()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm">
+                            Delete Account Permanently
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 4. ADMIN USER MANAGEMENT PANEL ==================== -->
+        <section id="page-admin" class="hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900 text-white p-6 rounded-3xl shadow-xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">System Administrator (012345678)</span>
+                        <h2 class="text-2xl font-extrabold">Admin User & Banner Management</h2>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openAuthModal('register')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition-all">
+                        + Create User / Listing
+                    </button>
+                    <button onclick="showPage('home')" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-all">
+                        View Live Site
+                    </button>
+                    <button onclick="handleLogout()" class="px-4 py-2 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold text-xs rounded-xl transition-all">
+                        Log Out
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Hero Banner Uploader -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Global Hero Carousel Banners</h3>
+                        <p class="text-xs text-slate-500">Upload official campus announcements or manage user promotional banners</p>
+                    </div>
+                    <input type="file" id="adminBannerInput" accept="image/*" class="hidden" onchange="handleAdminBannerUpload(event)">
+                    <button onclick="document.getElementById('adminBannerInput').click()" class="px-4 py-2 bg-slate-900 hover:bg-emerald-600 text-white font-bold text-xs rounded-xl transition-colors self-start">
+                        + Upload Admin Hero Banner
+                    </button>
+                </div>
+                <div id="adminBannersList" class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2"></div>
+            </div>
+
+            <!-- All Registered Users & Vendors Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Registered Studentpreneur Accounts</h3>
+                        <p class="text-xs text-slate-500">Oversee accounts, edit/fix user profiles directly, or force-delete any account</p>
+                    </div>
+                    <span id="adminTotalUsersBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700">0 Accounts</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
+                                <th class="py-3 px-4">Store / User</th>
+                                <th class="py-3 px-4">Category & Block</th>
+                                <th class="py-3 px-4">Phone & PIN</th>
+                                <th class="py-3 px-4">Price & Schedule</th>
+                                <th class="py-3 px-4">Status</th>
+                                <th class="py-3 px-4 text-right">Admin Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersTableBody" class="divide-y divide-slate-200 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- BUSINESS / ITEM DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl transition-all transform my-8">
+            <div class="relative">
+                <img id="modalCoverImg" src="" alt="Business Poster" class="w-full h-60 object-cover bg-slate-200">
+                <button onclick="closeModal('detailModal')" class="absolute top-4 right-4 w-9 h-9 bg-slate-900/60 text-white rounded-full flex items-center justify-center hover:bg-slate-900 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="absolute bottom-4 left-4 bg-slate-900/80 backdrop-blur px-3 py-1 rounded-full text-white text-xs font-bold flex items-center gap-2">
+                    <span id="modalStatusDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span id="modalStatusText">Available</span>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-5">
+                <!-- Multi-Image Gallery Strip -->
+                <div id="modalGalleryStrip" class="hidden flex gap-2 overflow-x-auto pb-1"></div>
+
+                <!-- Header -->
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <span id="modalCategoryTag" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md">Category</span>
+                        <h2 id="modalTitle" class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">Business Name</h2>
+                        <p id="modalBlock" class="text-xs text-slate-500 flex items-center gap-1 mt-1"></p>
+                    </div>
+                    <div class="w-14 h-14 rounded-2xl overflow-hidden border border-slate-200 flex-shrink-0 bg-slate-100">
+                        <img id="modalLogoImg" src="" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Schedule / Operating Hours -->
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex items-center gap-3">
+                    <div class="p-2.5 bg-white rounded-xl text-slate-600 shadow-sm">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operating Schedule (24H)</p>
+                        <p id="modalSchedule" class="text-sm font-semibold text-slate-800"></p>
+                    </div>
+                </div>
+
+                <!-- Category Specific Details Box -->
+                <div id="modalCategoryDetails" class="bg-emerald-50/50 rounded-2xl p-5 border border-emerald-100/80 space-y-3"></div>
+
+                <!-- Direct Contact WhatsApp Action -->
+                <div class="pt-2 flex items-center justify-between gap-4 border-t border-slate-100">
+                    <div>
+                        <p class="text-xs text-slate-400">Direct Owner Contact</p>
+                        <p id="modalPhone" class="text-sm font-bold text-slate-800"></p>
+                    </div>
+                    <a id="modalWhatsappBtn" href="#" target="_blank" rel="noopener noreferrer" onclick="recordHistory()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 flex items-center gap-2 transition-all active:scale-95">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> <span id="modalWhatsappText">Order via WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUDENTPRENEUR REGISTER / LOGIN MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-8 max-h-[92vh] overflow-y-auto">
+            <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="store" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-2xl font-extrabold text-slate-900">Studentpreneur & Admin Portal</h3>
+                <p class="text-xs text-slate-500 mt-1">Register a new business or sign in to manage your listing</p>
+            </div>
+
+            <!-- Tabs: Register vs Login -->
+            <div class="grid grid-cols-2 bg-slate-100 p-1 rounded-xl mb-5">
+                <button type="button" id="tabRegisterBtn" onclick="switchAuthTab('register')" class="py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all">
+                    New Registration
+                </button>
+                <button type="button" id="tabLoginBtn" onclick="switchAuthTab('login')" class="py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition-all">
+                    Account Login
+                </button>
+            </div>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Business Name *</label>
+                    <input type="text" id="regName" required placeholder="e.g. Block 4 Express Runner" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                </div>
+
+                <!-- Category & Block 1-11 Selector -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Category *</label>
+                        <select id="regCategory" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            <option value="Food & Bites">Food & Bites</option>
+                            <option value="Runners">Runners</option>
+                            <option value="Transports">Transports</option>
+                            <option value="Products">Products</option>
+                            <option value="Services">Services</option>
+                            <option value="Pre-Loved">Pre-Loved</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Block Location *</label>
+                        <select id="regBlock" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            <option value="Block 1">Block 1</option>
+                            <option value="Block 2">Block 2</option>
+                            <option value="Block 3">Block 3</option>
+                            <option value="Block 4">Block 4</option>
+                            <option value="Block 5">Block 5</option>
+                            <option value="Block 6">Block 6</option>
+                            <option value="Block 7">Block 7</option>
+                            <option value="Block 8">Block 8</option>
+                            <option value="Block 9">Block 9</option>
+                            <option value="Block 10">Block 10</option>
+                            <option value="Block 11">Block 11</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone *</label>
+                        <input type="tel" id="regPhone" required placeholder="e.g. 60123456789" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">4-Digit Security PIN *</label>
+                        <input type="password" id="regPin" required maxlength="4" pattern="\d{4}" placeholder="e.g. 1234" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Main Item / Car / Service *</label>
+                        <input type="text" id="regPrimaryDetail" required placeholder="e.g. Nasi Lemak / Myvi 1.5" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Pickup / Plate / Extra *</label>
+                        <input type="text" id="regExtraDetail" required placeholder="e.g. Foyer / Plate JVD 1234" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- 5. Price Standardization & Unit Classifier -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Price (RM) *</label>
+                        <input type="number" step="0.01" min="0" id="regPrice" onblur="formatDecimalInput(this)" required placeholder="5.00" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Unit Classifier *</label>
+                        <select id="regUnit" onchange="toggleCustomUnitInput('regUnit', 'regCustomUnitWrap')" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            <option value="pack">pack</option>
+                            <option value="piece">piece</option>
+                            <option value="page">page</option>
+                            <option value="pax">pax</option>
+                            <option value="Skip">Skip</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div id="regCustomUnitWrap" class="hidden">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Specify Unit *</label>
+                        <input type="text" id="regCustomUnit" placeholder="e.g. hour, slot, box" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- 6. Operating Schedule Configuration -->
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Operating Days *</label>
+                    <div class="flex flex-wrap gap-1.5">
+                        <label class="cursor-pointer"><input type="checkbox" value="Mon" checked class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Mon</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Tue" checked class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Tue</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Wed" checked class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Wed</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Thu" checked class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Thu</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Fri" checked class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Fri</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Sat" class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Sat</span></label>
+                        <label class="cursor-pointer"><input type="checkbox" value="Sun" class="reg-day-cb sr-only peer"><span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-slate-200 text-slate-600 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 inline-block">Sun</span></label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Opening (24H HH:mm)</label>
+                            <input type="time" id="regOpenTime" required value="08:00" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Closing (24H HH:mm)</label>
+                            <input type="time" id="regCloseTime" required value="22:00" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Multi-Image Product Upload -->
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Product Images (Multi-Upload) & Promotional Banner</label>
+                    <input type="file" id="regMultiImages" accept="image/*" multiple onchange="handleRegMultiImagesPreview(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+                    <div id="regMultiPreviewGrid" class="grid grid-cols-4 gap-2 pt-1"></div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all mt-2">
+                    Register & Open Dashboard
+                </button>
+            </form>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="hidden space-y-4">
+                <div id="loginErrorMsg" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold">
+                    Invalid Account/Phone Number or PIN.
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Account Number / WhatsApp Phone</label>
+                    <input type="tel" id="loginPhone" required placeholder="Enter phone or Admin account number" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">4-Digit Passcode / PIN</label>
+                    <input type="password" id="loginPin" required maxlength="4" placeholder="••••" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                </div>
+                <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- RECENT HISTORY MODAL -->
+    <div id="historyModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeModal('historyModal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            
+            <div class="flex items-center justify-between pr-8 mb-1">
+                <h3 class="text-xl font-extrabold text-slate-900">Recently Contacted</h3>
+                <button onclick="clearHistory()" class="text-[11px] font-bold text-rose-500 hover:underline">Clear</button>
+            </div>
+            <p class="text-xs text-slate-500 mb-4">Your recent WhatsApp inquiries on this device</p>
+
+            <div id="historyList" class="space-y-3 max-h-80 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT FULL-STACK LOGIC ==================== -->
+    <script>
+        // ============================================================================
+        // SUPABASE CONFIGURATION (Optional Cloud Sync)
+        // ============================================================================
+        const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_PUBLIC_KEY_HERE";
+
+        const isSupabaseConfigured = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("PASTE_YOUR");
+        const supabaseClient = isSupabaseConfigured
+            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+            : null;
+
+        // ============================================================================
+        // 4. AUTHENTICATION & SEEDED ADMIN CREDENTIALS (DEMO ACCOUNTS PURGED)
+        // ============================================================================
+        const ADMIN_ACCOUNT = {
+            phone: "012345678",
+            pin: "0987",
+            role: "admin"
+        };
+
+        // Purge legacy demo storage keys
+        localStorage.removeItem('gh_listings_v1');
+        localStorage.removeItem('gh_fallback_listings');
+
+        // Application State (Starts clean with zero hardcoded demo vendors)
+        let listings = JSON.parse(localStorage.getItem('gh_listings_v2')) || [];
+        let adminBanners = JSON.parse(localStorage.getItem('gh_admin_banners_v2')) || [];
+        let recentHistory = JSON.parse(localStorage.getItem('gh_history_v2')) || [];
+        let session = JSON.parse(localStorage.getItem('gh_session_v2')) || null; // { role: 'admin' | 'vendor', vendorId: number | null }
+
+        let selectedBusiness = null;
+        let activeCategory = 'All';
+        let activeBlock = 'All';
+        let pendingRegImages = [];
+        let currentHeroSlide = 0;
+        let heroInterval = null;
+
+        function saveState() {
+            localStorage.setItem('gh_listings_v2', JSON.stringify(listings));
+            localStorage.setItem('gh_admin_banners_v2', JSON.stringify(adminBanners));
+            localStorage.setItem('gh_history_v2', JSON.stringify(recentHistory));
+            localStorage.setItem('gh_session_v2', JSON.stringify(session));
+        }
+
+        // INITIALIZE APP ON LOAD
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadVendors();
+            renderAll();
+            startHeroAutoplay();
+            lucide.createIcons();
+        });
+
+        async function loadVendors() {
+            const badge = document.getElementById('dbStatusBadge');
+            if (!isSupabaseConfigured) {
+                badge.innerText = "Local Storage";
+                badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600";
+                return;
+            }
+            try {
+                const { data, error } = await supabaseClient
+                    .from('vendors')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+                listings = data || [];
+                saveState();
+                badge.innerText = "Live Cloud";
+                badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-700";
+            } catch (err) {
+                console.error("Supabase Error:", err.message);
+            }
+        }
+
+        function renderAll() {
+            renderNavAuth();
+            renderHeroCarousel();
+            renderHomeGrid();
+            applyListingsFilter();
+            renderHistoryModal();
+            if (session && session.role === 'admin') {
+                renderAdminPanel();
+            }
+            lucide.createIcons();
+        }
+
+        // ============================================================================
+        // 3. DYNAMIC FULL-WIDTH HERO CAROUSEL
+        // ============================================================================
+        function getActiveBanners() {
+            const slides = [];
+            // Admin uploaded banners
+            adminBanners.forEach(b => {
+                slides.push({
+                    id: b.id,
+                    title: b.title || "Campus Highlight",
+                    subtitle: "Official IIUM Pagoh Hub Announcement",
+                    badge: "Admin Banner",
+                    image: b.image,
+                    vendorId: null
+                });
+            });
+            // User uploaded promotional banners
+            listings.forEach(v => {
+                if (v.poster && v.poster.trim() !== "") {
+                    slides.push({
+                        id: `vendor-${v.id}`,
+                        title: v.name,
+                        subtitle: `${v.category} • ${v.block} • ${v.details?.formattedPrice || ''}`,
+                        badge: v.status,
+                        image: v.poster,
+                        vendorId: v.id
+                    });
+                }
+            });
+            return slides;
+        }
+
+        function renderHeroCarousel() {
+            const track = document.getElementById('heroCarouselTrack');
+            const dots = document.getElementById('heroCarouselDots');
+            const slides = getActiveBanners();
+
+            if (slides.length === 0) {
+                track.innerHTML = `
+                    <div class="p-8 sm:p-12 relative z-10 flex flex-col items-start justify-center min-h-[260px] sm:min-h-[320px] bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-3">
+                            IIUM Pagoh Directory
+                        </span>
+                        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white max-w-2xl">
+                            Support All Studentpreneurs in IIUM Pagoh
+                        </h1>
+                        <p class="text-slate-300 text-sm mt-2 max-w-xl">
+                            Direct WhatsApp ordering with zero middleman fees. Register your store and upload a promotional banner to be featured here!
+                        </p>
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            <button onclick="filterCategory('All')" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm rounded-xl transition-all">
+                                Browse Directory
+                            </button>
+                            <button onclick="openAuthModal('register')" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm rounded-xl border border-white/10 transition-all">
+                                Register Business
+                            </button>
+                        </div>
+                    </div>
+                `;
+                dots.innerHTML = '';
+                return;
+            }
+
+            if (currentHeroSlide >= slides.length) currentHeroSlide = 0;
+            const active = slides[currentHeroSlide];
+
+            track.innerHTML = `
+                <div class="relative w-full min-h-[260px] sm:min-h-[320px] flex items-end p-6 sm:p-10">
+                    <img src="${active.image}" alt="${active.title}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+                    <div class="relative z-10 max-w-2xl space-y-2">
+                        <span class="px-2.5 py-1 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider inline-block">
+                            ${active.badge}
+                        </span>
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight">${active.title}</h2>
+                        <p class="text-xs sm:text-sm text-slate-200">${active.subtitle}</p>
+                        ${active.vendorId ? `
+                            <div class="pt-2">
+                                <button onclick="openDetailModal(${active.vendorId})" class="px-4 py-2 bg-white text-slate-900 hover:bg-emerald-400 font-bold text-xs rounded-xl transition-all">
+                                    View Store Listing
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            dots.innerHTML = slides.map((_, idx) => `
+                <button onclick="goToHeroSlide(${idx})" class="h-2 rounded-full transition-all ${idx === currentHeroSlide ? 'w-6 bg-emerald-400' : 'w-2 bg-white/50 hover:bg-white'}"></button>
+            `).join('');
+        }
+
+        function nextHeroSlide() {
+            const slides = getActiveBanners();
+            if (slides.length <= 1) return;
+            currentHeroSlide = (currentHeroSlide + 1) % slides.length;
+            renderHeroCarousel();
+            lucide.createIcons();
+        }
+
+        function prevHeroSlide() {
+            const slides = getActiveBanners();
+            if (slides.length <= 1) return;
+            currentHeroSlide = (currentHeroSlide - 1 + slides.length) % slides.length;
+            renderHeroCarousel();
+            lucide.createIcons();
+        }
+
+        function goToHeroSlide(index) {
+            currentHeroSlide = index;
+            renderHeroCarousel();
+            lucide.createIcons();
+        }
+
+        function startHeroAutoplay() {
+            if (heroInterval) clearInterval(heroInterval);
+            heroInterval = setInterval(() => {
+                nextHeroSlide();
+            }, 5000);
+        }
+
+        // ============================================================================
+        // 5. PRICE STANDARDIZATION (RM 0.00) & UNIT CLASSIFIER HELPERS
+        // ============================================================================
+        function formatDecimalInput(inputEl) {
+            const val = parseFloat(inputEl.value);
+            if (!isNaN(val)) {
+                inputEl.value = val.toFixed(2);
+            }
+        }
+
+        function toggleCustomUnitInput(selectId, wrapperId) {
+            const val = document.getElementById(selectId).value;
+            const wrap = document.getElementById(wrapperId);
+            if (val === 'Others') {
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+            }
+        }
+
+        function buildFormattedPrice(rawAmount, unitChoice, customUnitText) {
+            const num = parseFloat(rawAmount);
+            const priceFixed = isNaN(num) ? "0.00" : num.toFixed(2);
+            let finalUnit = unitChoice;
+            if (unitChoice === 'Others') {
+                finalUnit = customUnitText ? customUnitText.trim() : 'unit';
+            }
+            if (!finalUnit || finalUnit === 'Skip') {
+                return `RM ${priceFixed}`;
+            }
+            return `RM ${priceFixed} / ${finalUnit}`;
+        }
+
+        // ============================================================================
+        // 6. 24-HOUR OPERATING SCHEDULE BUILDER
+        // ============================================================================
+        function buildScheduleString(daysArray, openTime, closeTime) {
+            const daysText = (daysArray && daysArray.length > 0) ? daysArray.join(', ') : 'Daily';
+            const open = openTime || '08:00';
+            const close = closeTime || '22:00';
+            return `${daysText} • ${open} - ${close}`;
+        }
+
+        // ============================================================================
+        // IMAGE COMPRESSION HELPER (Multi-Image & Banner Support)
+        // ============================================================================
+        function compressImageFile(file, maxWidth = 800) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const scale = maxWidth / img.width;
+                        canvas.width = img.width > maxWidth ? maxWidth : img.width;
+                        canvas.height = img.width > maxWidth ? img.height * scale : img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.78));
+                    };
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleRegMultiImagesPreview(event) {
+            const files = Array.from(event.target.files);
+            pendingRegImages = [];
+            const grid = document.getElementById('regMultiPreviewGrid');
+            grid.innerHTML = `<span class="text-xs text-slate-400 col-span-full">Processing images...</span>`;
+
+            for (const file of files) {
+                const dataUrl = await compressImageFile(file, 800);
+                pendingRegImages.push(dataUrl);
+            }
+
+            grid.innerHTML = pendingRegImages.map((src, i) => `
+                <div class="relative h-16 rounded-xl overflow-hidden border border-slate-200">
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <span class="absolute bottom-1 left-1 bg-slate-900/75 text-white text-[9px] px-1.5 py-0.5 rounded">${i === 0 ? 'Main' : '#' + (i + 1)}</span>
+                </div>
+            `).join('');
+        }
+
+        // ============================================================================
+        // NAVIGATION & FILTERING (CATEGORY + BLOCK 1-11 + SEARCH)
+        // ============================================================================
+        function showPage(pageId) {
+            ['home', 'listings', 'dashboard', 'admin'].forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        function renderNavAuth() {
+            const navArea = document.getElementById('navAuthArea');
+            const adminSwitchBtn = document.getElementById('dashAdminSwitchBtn');
+
+            if (session && session.role === 'admin') {
+                if (adminSwitchBtn) adminSwitchBtn.classList.remove('hidden');
+                navArea.innerHTML = `
+                    <button onclick="showPage('admin'); renderAdminPanel();" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm transition-all">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                        <span>Admin Panel</span>
+                    </button>
+                `;
+            } else if (session && session.role === 'vendor') {
+                if (adminSwitchBtn) adminSwitchBtn.classList.add('hidden');
+                navArea.innerHTML = `
+                    <button onclick="openDashboard(${session.vendorId})" class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl transition-all">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-600"></i>
+                        <span>My Store</span>
+                    </button>
+                `;
+            } else {
+                if (adminSwitchBtn) adminSwitchBtn.classList.add('hidden');
+                navArea.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-sm transition-all">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Login / Register</span>
+                        <span class="sm:hidden">Login</span>
+                    </button>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function renderHomeGrid() {
+            const grid = document.getElementById('homeBusinessGrid');
+            if (listings.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
+                        <i data-lucide="store" class="w-10 h-10 text-emerald-600 mx-auto"></i>
+                        <h3 class="text-base font-bold text-slate-800">No Studentpreneur Listings Yet</h3>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">Be the first to register!.</p>
+                        <button onclick="openAuthModal('register')" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl">Register First Business</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            grid.innerHTML = listings.slice(0, 6).map(item => createCardHTML(item)).join('');
+            lucide.createIcons();
+        }
+
+        function handleBlockFilter(blockVal) {
+            activeBlock = blockVal;
+            document.getElementById('desktopBlockFilter').value = blockVal;
+            document.getElementById('mobileBlockFilter').value = blockVal;
+            showPage('listings');
+            applyListingsFilter();
+        }
+
+        function handleSearch(query) {
+            const deskInput = document.getElementById('desktopSearchInput');
+            const mobInput = document.getElementById('mobileSearchInput');
+            if (deskInput && deskInput.value !== query) deskInput.value = query;
+            if (mobInput && mobInput.value !== query) mobInput.value = query;
+
+            showPage('listings');
+            applyListingsFilter();
+        }
+
+        function filterCategory(cat) {
+            activeCategory = cat;
+            showPage('listings');
+
+            document.querySelectorAll('.cat-pill-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all';
+                } else {
+                    btn.className = 'cat-pill-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all';
+                }
+            });
+
+            applyListingsFilter();
+        }
+
+        function applyListingsFilter() {
+            const query = (document.getElementById('desktopSearchInput')?.value || '').trim().toLowerCase();
+            
+            let badgeText = activeCategory;
+            if (activeBlock !== 'All') badgeText += ` • ${activeBlock}`;
+            document.getElementById('currentCategoryBadge').innerText = badgeText;
+            document.getElementById('currentCategoryTitle').innerText = query
+                ? `Search: "${query}"`
+                : (activeCategory === 'All' ? 'All Campus Listings' : `${activeCategory}`);
+
+            const filtered = listings.filter(item => {
+                const matchesCat = activeCategory === 'All' || item.category === activeCategory;
+                const matchesBlock = activeBlock === 'All' || item.block === activeBlock;
+                const detailValues = Object.values(item.details || {}).join(' ').toLowerCase();
+                const matchesQuery = !query || (
+                    item.name.toLowerCase().includes(query) ||
+                    item.category.toLowerCase().includes(query) ||
+                    (item.block || '').toLowerCase().includes(query) ||
+                    detailValues.includes(query)
+                );
+                return matchesCat && matchesBlock && matchesQuery;
+            });
+
+            renderListingsGrid(filtered);
+        }
+
+        function renderListingsGrid(items) {
+            const container = document.getElementById('listingsGrid');
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+                        <i data-lucide="search-x" class="w-10 h-10 text-slate-300 mx-auto"></i>
+                        <p class="text-sm font-bold text-slate-700">No matching listings found</p>
+                        <p class="text-xs text-slate-400">Try resetting your Block or Category filters.</p>
+                        <button onclick="resetAllFilters()" class="mt-2 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl">Reset All Filters</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            container.innerHTML = items.map(item => createCardHTML(item)).join('');
+            lucide.createIcons();
+        }
+
+        function resetAllFilters() {
+            activeCategory = 'All';
+            activeBlock = 'All';
+            document.getElementById('desktopSearchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            document.getElementById('desktopBlockFilter').value = 'All';
+            document.getElementById('mobileBlockFilter').value = 'All';
+            filterCategory('All');
+        }
+
+        function createCardHTML(item) {
+            const isAvailable = item.status === "Available";
+            const coverImg = item.poster || (item.product_images && item.product_images[0]) || "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=800&q=80";
+            const logoImg = item.logo || coverImg;
+            const formattedPrice = item.details?.formattedPrice || "RM 0.00";
+
+            return `
+                <div onclick="openDetailModal(${item.id})" class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-emerald-500/40 transition-all cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-44 overflow-hidden bg-slate-100">
+                            <img src="${coverImg}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            
+                            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                                ${item.category}
+                            </span>
+
+                            <span class="absolute top-3 right-3 bg-emerald-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-md shadow">
+                                ${formattedPrice}
+                            </span>
+
+                            <span class="absolute bottom-3 right-3 ${isAvailable ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-white/60'}"></span>
+                                ${item.status}
+                            </span>
+                        </div>
+
+                        <div class="p-4 space-y-2">
+                            <div class="flex items-center gap-3">
+                                <img src="${logoImg}" alt="${item.name}" class="w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm flex-shrink-0 bg-slate-50">
+                                <div class="min-w-0">
+                                    <h3 class="font-bold text-slate-900 text-base leading-snug truncate group-hover:text-emerald-600 transition-colors">${item.name}</h3>
+                                    <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5 font-semibold">
+                                        <i data-lucide="building-2" class="w-3 h-3 text-emerald-600 flex-shrink-0"></i>
+                                        <span class="truncate">${item.block}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                        <span class="truncate max-w-[210px]"><i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-slate-400"></i>${item.schedule}</span>
+                        <span class="font-bold text-emerald-600 flex items-center gap-0.5 flex-shrink-0">Details <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i></span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================================
+        // DETAIL MODAL WITH MULTI-IMAGE GALLERY
+        // ============================================================================
+        function openDetailModal(id) {
+            selectedBusiness = listings.find(b => b.id === id);
+            if (!selectedBusiness) return;
+
+            const b = selectedBusiness;
+            const gallery = (b.product_images && b.product_images.length > 0)
+                ? b.product_images
+                : (b.poster ? [b.poster] : ["https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=800&q=80"]);
+
+            document.getElementById('modalCoverImg').src = gallery[0];
+            document.getElementById('modalLogoImg').src = b.logo || gallery[0];
+            document.getElementById('modalTitle').innerText = b.name;
+            document.getElementById('modalCategoryTag').innerText = b.category;
+            document.getElementById('modalBlock').innerHTML = `<i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600"></i> ${b.block} • IIUM Pagoh`;
+            document.getElementById('modalSchedule').innerText = b.schedule;
+            document.getElementById('modalPhone').innerText = `+${b.phone}`;
+
+            // Multi-image thumbnail strip
+            const strip = document.getElementById('modalGalleryStrip');
+            if (gallery.length > 1) {
+                strip.classList.remove('hidden');
+                strip.innerHTML = gallery.map((imgUrl) => `
+                    <img src="${imgUrl}" onclick="document.getElementById('modalCoverImg').src='${imgUrl}'" class="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-emerald-500 cursor-pointer flex-shrink-0 transition-all">
+                `).join('');
+            } else {
+                strip.classList.add('hidden');
+            }
+
+            const isAvail = b.status === "Available";
+            document.getElementById('modalStatusDot').className = `w-2 h-2 rounded-full ${isAvail ? 'bg-emerald-400' : 'bg-rose-400'}`;
+            document.getElementById('modalStatusText').innerText = b.status;
+
+            const waBtn = document.getElementById('modalWhatsappBtn');
+            const waText = document.getElementById('modalWhatsappText');
+            waBtn.href = `https://wa.me/${b.phone}?text=Hi%20${encodeURIComponent(b.name)},%20I%20found%20your%20listing%20(${encodeURIComponent(b.block)})%20on%20GengHustle.MY!`;
+
+            if (isAvail) {
+                waBtn.className = "px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 flex items-center gap-2 transition-all active:scale-95";
+                waText.innerText = "Order via WhatsApp";
+            } else {
+                waBtn.className = "px-6 py-3 bg-slate-200 text-slate-500 font-bold text-sm rounded-xl flex items-center gap-2 cursor-not-allowed pointer-events-none";
+                waText.innerText = "Currently Paused";
+            }
+
+            const d = b.details || {};
+            document.getElementById('modalCategoryDetails').innerHTML = `
+                <h4 class="text-xs font-bold text-emerald-800 uppercase tracking-wider mb-2">Listing Specifications</h4>
+                <div class="grid grid-cols-2 gap-2.5 text-xs">
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100">
+                        <span class="text-slate-400 block">Main Offer / Item:</span>
+                        <strong class="text-slate-800">${d.primaryItem || b.name}</strong>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100">
+                        <span class="text-slate-400 block">Standardized Price:</span>
+                        <strong class="text-emerald-700 text-sm">${d.formattedPrice || 'RM 0.00'}</strong>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100">
+                        <span class="text-slate-400 block">Block Location:</span>
+                        <strong class="text-slate-800">${b.block}</strong>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-emerald-100">
+                        <span class="text-slate-400 block">Details / Pickup / Plate:</span>
+                        <strong class="text-slate-800">${d.extraInfo || '-'}</strong>
+                    </div>
+                </div>
+            `;
+
+            openModal('detailModal');
+            lucide.createIcons();
+        }
+
+        // ============================================================================
+        // AUTHENTICATION: REGISTRATION, LOGIN & ADMIN SEED CHECK
+        // ============================================================================
+        function openAuthModal(defaultTab = 'register') {
+            switchAuthTab(defaultTab);
+            openModal('authModal');
+        }
+
+        function switchAuthTab(tab) {
+            const regForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            const regBtn = document.getElementById('tabRegisterBtn');
+            const loginBtn = document.getElementById('tabLoginBtn');
+            document.getElementById('loginErrorMsg').classList.add('hidden');
+
+            if (tab === 'register') {
+                regForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                regBtn.className = "py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                loginBtn.className = "py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+            } else {
+                regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                loginBtn.className = "py-2 text-xs font-bold rounded-lg bg-white text-slate-900 shadow-sm transition-all";
+                regBtn.className = "py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+            }
+        }
+
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const category = document.getElementById('regCategory').value;
+            const block = document.getElementById('regBlock').value;
+            const phone = document.getElementById('regPhone').value.replace(/\D/g, '');
+            const pin = document.getElementById('regPin').value.trim();
+            const primaryItem = document.getElementById('regPrimaryDetail').value.trim();
+            const extraInfo = document.getElementById('regExtraDetail').value.trim();
+
+            const rawPrice = parseFloat(document.getElementById('regPrice').value || 0).toFixed(2);
+            const unitChoice = document.getElementById('regUnit').value;
+            const customUnit = document.getElementById('regCustomUnit').value.trim();
+            const formattedPrice = buildFormattedPrice(rawPrice, unitChoice, customUnit);
+
+            const selectedDays = Array.from(document.querySelectorAll('.reg-day-cb:checked')).map(cb => cb.value);
+            const openTime = document.getElementById('regOpenTime').value || "08:00";
+            const closeTime = document.getElementById('regCloseTime').value || "22:00";
+            const schedule = buildScheduleString(selectedDays, openTime, closeTime);
+
+            const gallery = pendingRegImages.length > 0
+                ? [...pendingRegImages]
+                : ["https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=800&q=80"];
+
+            const payload = {
+                name,
+                category,
+                block,
+                status: "Available",
+                schedule,
+                schedule_config: { days: selectedDays, openTime, closeTime },
+                phone,
+                pin,
+                logo: gallery[0],
+                poster: gallery[0],
+                product_images: gallery,
+                details: {
+                    primaryItem,
+                    rawPrice,
+                    unit: unitChoice,
+                    customUnit,
+                    formattedPrice,
+                    extraInfo
+                }
+            };
+
+            try {
+                let createdVendor = null;
+                if (isSupabaseConfigured) {
+                    const { data, error } = await supabaseClient.from('vendors').insert([payload]).select().single();
+                    if (error) throw error;
+                    createdVendor = data;
+                } else {
+                    createdVendor = { id: Date.now(), ...payload };
+                }
+
+                listings.unshift(createdVendor);
+                if (!session || session.role !== 'admin') {
+                    session = { role: 'vendor', vendorId: createdVendor.id };
+                }
+                pendingRegImages = [];
+                document.getElementById('regMultiPreviewGrid').innerHTML = '';
+                saveState();
+
+                e.target.reset();
+                closeModal('authModal');
+                renderAll();
+
+                if (session.role === 'admin') {
+                    showPage('admin');
+                    renderAdminPanel();
+                } else {
+                    openDashboard(createdVendor.id);
+                }
+            } catch (err) {
+                alert("Registration error: " + err.message);
+            }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const rawPhone = document.getElementById('loginPhone').value.trim();
+            const cleanPhone = rawPhone.replace(/\D/g, '');
+            const pin = document.getElementById('loginPin').value.trim();
+
+            // 1. Check Seeded Admin Credentials (012345678 / 0987)
+            if ((rawPhone === ADMIN_ACCOUNT.phone || cleanPhone === ADMIN_ACCOUNT.phone) && pin === ADMIN_ACCOUNT.pin) {
+                session = { role: 'admin', vendorId: null };
+                saveState();
+                e.target.reset();
+                closeModal('authModal');
+                renderAll();
+                showPage('admin');
+                renderAdminPanel();
+                return;
+            }
+
+            // 2. Check Registered Vendor Credentials
+            const matched = listings.find(v => v.phone.replace(/\D/g, '') === cleanPhone && String(v.pin) === pin);
+            if (!matched) {
+                document.getElementById('loginErrorMsg').classList.remove('hidden');
+                return;
+            }
+
+            session = { role: 'vendor', vendorId: matched.id };
+            saveState();
+            e.target.reset();
+            closeModal('authModal');
+            renderAll();
+            openDashboard(matched.id);
+        }
+
+        function handleLogout() {
+            session = null;
+            saveState();
+            renderAll();
+            showPage('home');
+        }
+
+        // ============================================================================
+        // VENDOR DASHBOARD, BANNER REMOVAL, MULTI-IMAGE & SELF-DELETE
+        // ============================================================================
+        let editingVendorId = null;
+
+        function openDashboard(vendorId) {
+            const targetId = vendorId || (session && session.vendorId);
+            const vendor = listings.find(v => v.id === targetId);
+            if (!vendor) {
+                openAuthModal('login');
+                return;
+            }
+            editingVendorId = vendor.id;
+
+            const d = vendor.details || {};
+            const sched = vendor.schedule_config || { days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], openTime: '08:00', closeTime: '22:00' };
+
+            document.getElementById('dashVendorName').innerText = vendor.name;
+            document.getElementById('dashVendorCategory').innerText = vendor.category;
+            document.getElementById('dashVendorBlock').innerText = `${vendor.block} • IIUM Pagoh`;
+            document.getElementById('dashVendorLogo').src = vendor.logo || "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=200&q=80";
+
+            // Banner Preview & Remove Banner State
+            const posterImg = document.getElementById('dashPosterPreview');
+            const noBannerTxt = document.getElementById('dashNoBannerText');
+            const removeBannerBtn = document.getElementById('removeBannerBtn');
+            if (vendor.poster) {
+                posterImg.src = vendor.poster;
+                posterImg.classList.remove('hidden');
+                noBannerTxt.classList.add('hidden');
+                removeBannerBtn.classList.remove('hidden');
+            } else {
+                posterImg.src = '';
+                posterImg.classList.add('hidden');
+                noBannerTxt.classList.remove('hidden');
+                removeBannerBtn.classList.add('hidden');
+            }
+
+            updateDashboardStatusUI(vendor.status);
+
+            // Populate Form Inputs
+            document.getElementById('dashInputName').value = vendor.name;
+            document.getElementById('dashInputBlock').value = vendor.block || 'Block 1';
+            document.getElementById('dashInputCategory').value = vendor.category || 'Food & Bites';
+            document.getElementById('dashInputPrimary').value = d.primaryItem || vendor.name;
+            document.getElementById('dashInputPrice').value = parseFloat(d.rawPrice || 0).toFixed(2);
+            document.getElementById('dashInputUnit').value = d.unit || 'pack';
+            document.getElementById('dashInputCustomUnit').value = d.customUnit || '';
+            toggleCustomUnitInput('dashInputUnit', 'dashCustomUnitWrap');
+            document.getElementById('dashInputExtra').value = d.extraInfo || vendor.block;
+
+            // Populate Days & 24h Times
+            document.querySelectorAll('.dash-day-cb').forEach(cb => {
+                cb.checked = (sched.days || []).includes(cb.value);
+            });
+            document.getElementById('dashOpenTime').value = sched.openTime || '08:00';
+            document.getElementById('dashCloseTime').value = sched.closeTime || '22:00';
+
+            renderDashProductGallery(vendor);
+            showPage('dashboard');
+        }
+
+        function renderDashProductGallery(vendor) {
+            const grid = document.getElementById('dashProductGalleryGrid');
+            const imgs = vendor.product_images || [];
+            if (imgs.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No product photos uploaded.</p>`;
+                return;
+            }
+            grid.innerHTML = imgs.map((src, idx) => `
+                <div class="relative h-20 rounded-xl overflow-hidden border border-slate-200 group">
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeProductGalleryImage(${idx})" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs opacity-90 hover:opacity-100">
+                        ×
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        async function handleDashMultiImageUpload(event) {
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+            const files = Array.from(event.target.files);
+            if (!vendor.product_images) vendor.product_images = [];
+
+            for (const file of files) {
+                const compressed = await compressImageFile(file, 800);
+                vendor.product_images.push(compressed);
+            }
+            if (!vendor.logo && vendor.product_images[0]) vendor.logo = vendor.product_images[0];
+
+            await syncVendorUpdate(vendor);
+            renderDashProductGallery(vendor);
+            renderAll();
+        }
+
+        async function removeProductGalleryImage(index) {
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor || !vendor.product_images) return;
+            vendor.product_images.splice(index, 1);
+            await syncVendorUpdate(vendor);
+            renderDashProductGallery(vendor);
+            renderAll();
+        }
+
+        // 3. Remove Banner Action
+        async function handleRemoveBanner() {
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+            vendor.poster = null;
+            await syncVendorUpdate(vendor);
+            openDashboard(vendor.id);
+            renderAll();
+        }
+
+        async function handlePosterFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+
+            const compressed = await compressImageFile(file, 900);
+            vendor.poster = compressed;
+            await syncVendorUpdate(vendor);
+            openDashboard(vendor.id);
+            renderAll();
+        }
+
+        function updateDashboardStatusUI(status) {
+            const label = document.getElementById('dashStatusLabel');
+            if (status === "Available") {
+                label.innerText = '🟢 Available (Taking Orders)';
+                label.className = 'text-sm font-bold text-emerald-400';
+            } else {
+                label.innerText = '🔴 Paused / In Class';
+                label.className = 'text-sm font-bold text-rose-400';
+            }
+        }
+
+        async function toggleVendorStatus() {
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+            vendor.status = vendor.status === "Available" ? "Paused / In Class" : "Available";
+            await syncVendorUpdate(vendor);
+            updateDashboardStatusUI(vendor.status);
+            renderAll();
+        }
+
+        async function handleUpdateVendorDetails(e) {
+            e.preventDefault();
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+
+            vendor.name = document.getElementById('dashInputName').value.trim();
+            vendor.block = document.getElementById('dashInputBlock').value;
+            vendor.category = document.getElementById('dashInputCategory').value;
+
+            const primaryItem = document.getElementById('dashInputPrimary').value.trim();
+            const rawPrice = parseFloat(document.getElementById('dashInputPrice').value || 0).toFixed(2);
+            const unit = document.getElementById('dashInputUnit').value;
+            const customUnit = document.getElementById('dashInputCustomUnit').value.trim();
+            const formattedPrice = buildFormattedPrice(rawPrice, unit, customUnit);
+            const extraInfo = document.getElementById('dashInputExtra').value.trim();
+
+            const selectedDays = Array.from(document.querySelectorAll('.dash-day-cb:checked')).map(cb => cb.value);
+            const openTime = document.getElementById('dashOpenTime').value || '08:00';
+            const closeTime = document.getElementById('dashCloseTime').value || '22:00';
+
+            vendor.schedule_config = { days: selectedDays, openTime, closeTime };
+            vendor.schedule = buildScheduleString(selectedDays, openTime, closeTime);
+            vendor.details = { primaryItem, rawPrice, unit, customUnit, formattedPrice, extraInfo };
+
+            await syncVendorUpdate(vendor);
+            openDashboard(vendor.id);
+            renderAll();
+            alert("Store settings and schedule updated!");
+        }
+
+        async function syncVendorUpdate(vendor) {
+            if (isSupabaseConfigured) {
+                try {
+                    await supabaseClient
+                        .from('vendors')
+                        .update({
+                            name: vendor.name,
+                            category: vendor.category,
+                            block: vendor.block,
+                            status: vendor.status,
+                            schedule: vendor.schedule,
+                            schedule_config: vendor.schedule_config,
+                            poster: vendor.poster,
+                            logo: vendor.logo,
+                            product_images: vendor.product_images,
+                            details: vendor.details
+                        })
+                        .eq('id', vendor.id);
+                } catch (err) {
+                    console.error("Supabase update error:", err.message);
+                }
+            }
+            saveState();
+        }
+
+        // 4. Self-Service Account Deletion
+        async function handleSelfDeleteAccount() {
+            const vendor = listings.find(v => v.id === editingVendorId);
+            if (!vendor) return;
+            if (!confirm(`Are you sure you want to permanently delete "${vendor.name}"? This action cannot be undone.`)) return;
+
+            await deleteVendorById(vendor.id);
+            if (session && session.role === 'vendor') {
+                session = null;
+                saveState();
+                renderAll();
+                showPage('home');
+            } else if (session && session.role === 'admin') {
+                renderAll();
+                showPage('admin');
+            }
+        }
+
+        async function deleteVendorById(id) {
+            if (isSupabaseConfigured) {
+                try {
+                    await supabaseClient.from('vendors').delete().eq('id', id);
+                } catch (err) {
+                    console.error("Supabase delete error:", err.message);
+                }
+            }
+            listings = listings.filter(v => v.id !== id);
+            saveState();
+        }
+
+        // ============================================================================
+        // 4. ADMIN USER & BANNER MANAGEMENT PANEL
+        // ============================================================================
+        function renderAdminPanel() {
+            const tbody = document.getElementById('adminUsersTableBody');
+            const badge = document.getElementById('adminTotalUsersBadge');
+            const bannersList = document.getElementById('adminBannersList');
+
+            badge.innerText = `${listings.length} Registered Account${listings.length === 1 ? '' : 's'}`;
+
+            // Render Active Hero Banners (Admin + User Banners)
+            const allBanners = getActiveBanners();
+            if (allBanners.length === 0) {
+                bannersList.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No active hero banners. Upload an Admin banner or have a user upload a poster.</p>`;
+            } else {
+                bannersList.innerHTML = allBanners.map(b => `
+                    <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 h-28 group">
+                        <img src="${b.image}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-900/50 p-3 flex flex-col justify-between text-white">
+                            <span class="text-[10px] font-bold uppercase bg-emerald-500 text-slate-950 px-2 py-0.5 rounded self-start">${b.badge}</span>
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-xs font-bold truncate">${b.title}</span>
+                                <button onclick="adminRemoveBanner('${b.id}', ${b.vendorId})" class="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold rounded-lg">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Users Table
+            if (listings.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">No user accounts registered yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = listings.map(user => `
+                <tr class="hover:bg-slate-50/80">
+                    <td class="py-3.5 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${user.logo || 'https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=100&q=80'}" class="w-9 h-9 rounded-xl object-cover border border-slate-200">
+                            <div>
+                                <p class="font-bold text-slate-900 text-xs">${user.name}</p>
+                                <p class="text-[11px] text-slate-400">ID: ${user.id}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs">
+                        <span class="font-bold text-slate-700 block">${user.category}</span>
+                        <span class="text-emerald-600 font-semibold">${user.block}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs">
+                        <span class="font-bold text-slate-800 block">+${user.phone}</span>
+                        <span class="text-slate-400">PIN: ${user.pin}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs">
+                        <span class="font-bold text-emerald-700 block">${user.details?.formattedPrice || '-'}</span>
+                        <span class="text-[11px] text-slate-400">${user.schedule}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${user.status === 'Available' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                        <button onclick="openDashboard(${user.id})" class="px-3 py-1.5 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 font-bold text-xs rounded-lg transition-colors">
+                            Edit / Fix
+                        </button>
+                        <button onclick="adminForceDeleteUser(${user.id})" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold text-xs rounded-lg transition-colors">
+                            Force Delete
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function handleAdminBannerUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const title = prompt("Enter a headline for this Hero Banner:", "Featured Campus Promo") || "Campus Announcement";
+            const compressed = await compressImageFile(file, 1000);
+            adminBanners.unshift({
+                id: 'adm-' + Date.now(),
+                title,
+                image: compressed
+            });
+            saveState();
+            renderAll();
+        }
+
+        async function adminRemoveBanner(bannerId, vendorId) {
+            if (vendorId) {
+                const vendor = listings.find(v => v.id === vendorId);
+                if (vendor) {
+                    vendor.poster = null;
+                    await syncVendorUpdate(vendor);
+                }
+            } else {
+                adminBanners = adminBanners.filter(b => b.id !== bannerId);
+                saveState();
+            }
+            renderAll();
+        }
+
+        async function adminForceDeleteUser(id) {
+            const target = listings.find(v => v.id === id);
+            if (!target) return;
+            if (!confirm(`ADMIN ACTION: Force-delete account "${target.name}" (+${target.phone})?`)) return;
+            await deleteVendorById(id);
+            renderAll();
+        }
+
+        // ============================================================================
+        // ORDER HISTORY & MODAL HELPERS
+        // ============================================================================
+        function recordHistory() {
+            if (!selectedBusiness) return;
+            recentHistory = recentHistory.filter(i => i.id !== selectedBusiness.id);
+            recentHistory.unshift({
+                id: selectedBusiness.id,
+                name: selectedBusiness.name,
+                category: selectedBusiness.category,
+                block: selectedBusiness.block,
+                logo: selectedBusiness.logo,
+                phone: selectedBusiness.phone,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+            saveState();
+            renderHistoryModal();
+        }
+
+        function clearHistory() {
+            recentHistory = [];
+            saveState();
+            renderHistoryModal();
+        }
+
+        function renderHistoryModal() {
+            const container = document.getElementById('historyList');
+            const dot = document.getElementById('historyBadgeDot');
+
+            if (recentHistory.length === 0) {
+                dot.classList.add('hidden');
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No recent WhatsApp orders yet.</p>`;
+                return;
+            }
+
+            dot.classList.remove('hidden');
+            container.innerHTML = recentHistory.map(item => `
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.logo}" class="w-9 h-9 rounded-lg object-cover bg-white">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-800">${item.name}</h4>
+                            <span class="text-[10px] text-slate-400">${item.category} • ${item.block || ''} • ${item.time || 'Recent'}</span>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/${item.phone}" target="_blank" rel="noopener noreferrer" class="p-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
