@@ -4,7 +4,7 @@
     "name": "ToastyBite",
     "category": "Food & Bites",
     "block": "Block 6",
-    "status": "Paused / In Class",
+    "status": "Available",
     "schedule": "Mon, Wed, Fri, Sat, Sun • 06:00 - 20:30",
     "schedule_config": {
       "days": [
