@@ -29,7 +29,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 gap-4">
                 
-                <!-- 1. Branding & SVG Logo Placeholder (Relative path for GitHub Pages) -->
+                <!-- 1. Branding & SVG Logo Placeholder -->
                 <div class="flex items-center gap-3">
                     <a href="#" onclick="showPage('home'); return false;" class="flex items-center gap-2.5 group">
                         <img src="assets/logo-placeholder.svg" 
@@ -71,7 +71,7 @@
 
                 <!-- Auth / Profile / Sync Buttons -->
                 <div class="flex items-center gap-2">
-                    <button onclick="loadVendors()" class="p-2.5 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors" title="Sync from GitHub">
+                    <button onclick="loadVendors()" class="p-2.5 rounded-xl hover:bg-slate-100 text-slate-600 transition-colors" title="Sync Live Database">
                         <i data-lucide="refresh-cw" id="refreshIcon" class="w-4 h-4"></i>
                     </button>
 
@@ -393,7 +393,7 @@
                         </div>
 
                         <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-md">
-                            Save & Commit Changes to GitHub
+                            Save & Sync Changes to Cloud
                         </button>
                     </form>
                 </div>
@@ -724,7 +724,7 @@
                 </div>
 
                 <button type="submit" id="regSubmitBtn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition-all mt-2">
-                    Register & Commit to GitHub
+                    Register & Publish Store
                 </button>
             </form>
 
@@ -765,19 +765,12 @@
         </div>
     </div>
 
-    <!-- ==================== JAVASCRIPT FULL-STACK GITHUB LOGIC ==================== -->
+    <!-- ==================== JAVASCRIPT FULL-STACK PROXY + GITHUB LOGIC ==================== -->
     <script>
         // ============================================================================
-        // GITHUB REPOSITORY DATABASE CONFIGURATION (riezskies-xabeast/genghustle.my)
+        // LIVE PUBLIC PROXY DATABASE CONFIGURATION (Connected to Cloudflare Worker)
         // ============================================================================
-        const GITHUB_CONFIG = {
-            owner: "riezskies-xabeast",
-            repo: "genghustle.my",
-            path: "data/vendors.json",
-            branch: "main",
-            token: "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" // Paste Fine-Grained Token (Contents: Read & Write)
-        };
-
+        const API_URL = "https://genghustle-my.riezskies.workers.dev";
         let githubFileSHA = null;
 
         // ============================================================================
@@ -822,35 +815,26 @@
         });
 
         // ============================================================================
-        // GITHUB REST API READ & WRITE ENGINE
+        // CLOUDFLARE WORKER -> GITHUB REST API READ & WRITE ENGINE
         // ============================================================================
         async function loadVendors() {
             const badge = document.getElementById('dbStatusBadge');
             const refreshIcon = document.getElementById('refreshIcon');
             if (refreshIcon) refreshIcon.classList.add('animate-spin');
 
-            const hasToken = GITHUB_CONFIG.token && !GITHUB_CONFIG.token.includes("PASTE_YOUR");
-
             try {
                 badge.innerText = "Syncing Git...";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-100 text-blue-700";
 
-                const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}?ref=${GITHUB_CONFIG.branch}&t=${Date.now()}`;
-                const headers = { "Accept": "application/vnd.github+json" };
-                if (hasToken) {
-                    headers["Authorization"] = `Bearer ${GITHUB_CONFIG.token}`;
-                }
-
-                // Public repo allows reading vendors.json even before pasting token!
-                const response = await fetch(url, { headers });
-
+                const response = await fetch(API_URL);
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: Create data/vendors.json in repo`);
+                    throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
                 githubFileSHA = data.sha;
 
+                // Decode base64 UTF-8 content from GitHub
                 const rawContent = decodeURIComponent(escape(atob(data.content.replace(/\s/g, ''))));
                 const parsed = JSON.parse(rawContent);
 
@@ -859,13 +843,11 @@
                     saveState();
                 }
 
-                badge.innerText = hasToken ? "GitHub Live RW" : "GitHub Read-Only";
-                badge.className = hasToken
-                    ? "text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-700"
-                    : "text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800";
+                badge.innerText = "Live Cloud Sync";
+                badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-700";
                 renderAll();
             } catch (err) {
-                console.warn("GitHub fetch notice:", err.message);
+                console.warn("Proxy load notice:", err.message);
                 badge.innerText = "Local Fallback";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600";
             } finally {
@@ -874,26 +856,13 @@
         }
 
         async function commitVendorsToGitHub(commitMessage = "Update vendors directory") {
-            const hasToken = GITHUB_CONFIG.token && !GITHUB_CONFIG.token.includes("PASTE_YOUR");
-            if (!hasToken) {
-                console.warn("No GitHub PAT configured; saved to localStorage only.");
-                return;
-            }
-
             const badge = document.getElementById('dbStatusBadge');
-            badge.innerText = "Committing...";
+            badge.innerText = "Saving to GitHub...";
             badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800";
 
-            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
-
-            // Ensure we have the latest SHA before committing
+            // Ensure latest SHA is loaded before committing
             if (!githubFileSHA) {
-                const checkRes = await fetch(`${url}?ref=${GITHUB_CONFIG.branch}`, {
-                    headers: {
-                        "Accept": "application/vnd.github+json",
-                        "Authorization": `Bearer ${GITHUB_CONFIG.token}`
-                    }
-                });
+                const checkRes = await fetch(API_URL);
                 if (checkRes.ok) {
                     const fileInfo = await checkRes.json();
                     githubFileSHA = fileInfo.sha;
@@ -903,33 +872,29 @@
             const jsonString = JSON.stringify(listings, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
-            const body = {
+            const payload = {
                 message: commitMessage,
                 content: base64Content,
-                branch: GITHUB_CONFIG.branch
+                branch: "main"
             };
-            if (githubFileSHA) body.sha = githubFileSHA;
+            if (githubFileSHA) payload.sha = githubFileSHA;
 
-            const res = await fetch(url, {
+            const res = await fetch(API_URL, {
                 method: "PUT",
-                headers: {
-                    "Accept": "application/vnd.github+json",
-                    "Authorization": `Bearer ${GITHUB_CONFIG.token}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
             });
 
             if (!res.ok) {
-                const errorData = await res.json();
+                const errData = await res.json().catch(() => ({}));
                 badge.innerText = "Commit Error";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-rose-100 text-rose-700";
-                throw new Error(errorData.message || "Failed to commit changes to GitHub");
+                throw new Error(errData.message || `HTTP ${res.status}`);
             }
 
             const resData = await res.json();
-            githubFileSHA = resData.content.sha;
-            badge.innerText = "GitHub Live RW";
+            githubFileSHA = resData.content?.sha || githubFileSHA;
+            badge.innerText = "Live Cloud Sync";
             badge.className = "text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-700";
         }
 
@@ -1108,7 +1073,7 @@
         }
 
         // ============================================================================
-        // IMAGE COMPRESSION HELPER (Optimized for GitHub JSON Storage)
+        // IMAGE COMPRESSION HELPER (Optimized for Fast GitHub JSON Storage)
         // ============================================================================
         function compressImageFile(file, maxWidth = 700) {
             return new Promise((resolve, reject) => {
@@ -1456,7 +1421,7 @@
             e.preventDefault();
             const submitBtn = document.getElementById('regSubmitBtn');
             submitBtn.disabled = true;
-            submitBtn.innerText = "Committing to GitHub...";
+            submitBtn.innerText = "Saving to Cloud...";
 
             const name = document.getElementById('regName').value.trim();
             const category = document.getElementById('regCategory').value;
@@ -1526,10 +1491,10 @@
                     openDashboard(createdVendor.id);
                 }
             } catch (err) {
-                alert("GitHub Commit Notice: " + err.message);
+                alert("Cloud Sync Notice: " + err.message);
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Register & Commit to GitHub";
+                submitBtn.innerText = "Register & Publish Store";
             }
         }
 
@@ -1745,7 +1710,7 @@
             await syncVendorUpdate(vendor);
             openDashboard(vendor.id);
             renderAll();
-            alert("Store settings updated & committed!");
+            alert("Store settings updated & synced to cloud!");
         }
 
         async function syncVendorUpdate(vendor) {
@@ -1753,8 +1718,8 @@
             try {
                 await commitVendorsToGitHub(`Update vendor: ${vendor.name}`);
             } catch (err) {
-                console.error("GitHub commit error:", err.message);
-                alert("Saved locally, but GitHub commit failed: " + err.message);
+                console.error("Cloud sync error:", err.message);
+                alert("Saved locally, but cloud sync failed: " + err.message);
             }
         }
 
@@ -1783,8 +1748,8 @@
             try {
                 await commitVendorsToGitHub(`Delete vendor: ${target ? target.name : id}`);
             } catch (err) {
-                console.error("GitHub delete error:", err.message);
-                alert("Removed locally, but GitHub commit failed: " + err.message);
+                console.error("Cloud delete error:", err.message);
+                alert("Removed locally, but cloud sync failed: " + err.message);
             }
         }
 
