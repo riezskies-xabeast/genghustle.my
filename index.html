@@ -1252,48 +1252,49 @@
             }
         }
 
-            async function commitVendorsToGitHub(commitMessage = "Update vendors directory") {
+        async function commitVendorsToGitHub(commitMessage = "Update vendors directory") {
             const badge = document.getElementById('dbStatusBadge');
-                badge.innerText = "Saving...";
-                badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800";
-                listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
-
+            badge.innerText = "Saving...";
+            badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800";
+        
+            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
+        
             const repoDataPayload = [
-            ...listings,
-        {
-            id: SYSTEM_META_ID,
-            adminContacts,
-            adminBanners,
-            updatedAt: new Date().toISOString()
-        }
-    ];
-
+                ...listings,
+                {
+                    id: SYSTEM_META_ID,
+                    adminContacts,
+                    adminBanners,
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+        
             const jsonString = JSON.stringify(repoDataPayload, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
+        
             const payload = {
-            message: commitMessage,
-            content: base64Content
-    };
-
+                message: commitMessage,
+                content: base64Content
+            };
+        
             const res = await fetch(API_URL, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-    });
-
-        if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            badge.innerText = "Commit Error";
-            badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700";
-            throw new Error(errData.message || `HTTP ${res.status}`);
-    }
-
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+        
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                badge.innerText = "Commit Error";
+                badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700";
+                throw new Error(errData.message || `HTTP ${res.status}`);
+            }
+        
             const resData = await res.json();
             githubFileSHA = resData.content?.sha || githubFileSHA;
             badge.innerText = "Live Cloud Sync";
             badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700";
-}
+        }
 
         function renderAll() {
             renderNavAuth();
