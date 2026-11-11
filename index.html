@@ -1065,20 +1065,20 @@
         }
 
         function formatCurrencyNumber(rawAmount) {
-            const num = parseRawNumber(rawAmount);
-            return Number(num).toLocaleString('en-MY', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        }
-
-        function formatDecimalInput(inputEl) {
-            const cleaned = String(inputEl.value).replace(/,/g, '');
-            const val = parseFloat(cleaned);
-            if (!isNaN(val)) {
-                inputEl.value = val.toFixed(2);
+                const num = parseRawNumber(rawAmount);
+                const parts = num.toFixed(2).split('.');
+                // Inserts a comma every 3 digits starting at 1,000
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return parts.join('.');
             }
-        }
+        
+            function formatDecimalInput(inputEl) {
+                const cleaned = String(inputEl.value).replace(/,/g, '');
+                const val = parseFloat(cleaned);
+                if (!isNaN(val)) {
+                    inputEl.value = val.toFixed(2);
+                }
+            }
 
         function toggleCustomUnitInput(selectId, wrapperId) {
             const val = document.getElementById(selectId).value;
