@@ -1252,78 +1252,48 @@
             }
         }
 
-        async function commitVendorsToGitHub(commitMessage = "Update vendors directory") {
+            async function commitVendorsToGitHub(commitMessage = "Update vendors directory") {
             const badge = document.getElementById('dbStatusBadge');
-            badge.innerText = "Saving...";
-            badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800";
-
-            // Always fetch the latest file metadata first to guarantee the correct SHA
-            try {
-                const checkRes = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
-                if (checkRes.ok) {
-                    const fileInfo = await checkRes.json();
-                    if (fileInfo.sha) {
-                        githubFileSHA = fileInfo.sha;
-                    }
-                }
-            } catch (fetchErr) {
-                console.warn("Could not pre-fetch SHA:", fetchErr);
-            }
-
-            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
+                badge.innerText = "Saving...";
+                badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800";
+                listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
 
             const repoDataPayload = [
-                ...listings,
-                {
-                    id: SYSTEM_META_ID,
-                    adminContacts,
-                    adminBanners,
-                    updatedAt: new Date().toISOString()
-                }
-            ];
+            ...listings,
+        {
+            id: SYSTEM_META_ID,
+            adminContacts,
+            adminBanners,
+            updatedAt: new Date().toISOString()
+        }
+    ];
 
             const jsonString = JSON.stringify(repoDataPayload, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
             const payload = {
-                message: commitMessage,
-                content: base64Content,
-                branch: "main"
-            };
-            if (githubFileSHA) payload.sha = githubFileSHA;
+            message: commitMessage,
+            content: base64Content
+    };
 
-            let res = await fetch(API_URL, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+            const res = await fetch(API_URL, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+    });
 
-            // If a 409 Conflict occurs, force refresh SHA and retry immediately
-            if (res.status === 409) {
-                const retryCheck = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
-                if (retryCheck.ok) {
-                    const freshInfo = await retryCheck.json();
-                    payload.sha = freshInfo.sha;
-                    res = await fetch(API_URL, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
-                }
-            }
-
-            if (!res.ok) {
-                const errData = await res.json().catch(() => ({}));
-                badge.innerText = "Commit Error";
-                badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700";
-                throw new Error(errData.message || `HTTP ${res.status}`);
-            }
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            badge.innerText = "Commit Error";
+            badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700";
+            throw new Error(errData.message || `HTTP ${res.status}`);
+    }
 
             const resData = await res.json();
             githubFileSHA = resData.content?.sha || githubFileSHA;
             badge.innerText = "Live Cloud Sync";
             badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700";
-        }
+}
 
         function renderAll() {
             renderNavAuth();
