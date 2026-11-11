@@ -40,9 +40,15 @@
         .safe-bottom {
             padding-bottom: max(1rem, env(safe-area-inset-bottom));
         }
+        /* Smooth touch action for swipeable hero carousel */
+        #heroCarouselTrack {
+            touch-action: pan-y;
+            user-select: none;
+            -webkit-user-select: none;
+        }
     </style>
 </head>
-<body class="text-slate-800 antialiased pb-24 md:pb-12">
+<body class="text-slate-800 antialiased pb-24 md:pb-12 flex flex-col min-h-screen">
 
     <!-- ==================== TOP NAVIGATION HEADER ==================== -->
     <header class="sticky top-0 z-40 glass-header border-b border-slate-200/80 transition-all">
@@ -59,7 +65,7 @@
                         <div class="truncate">
                             <span class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight block leading-none truncate">GengHustle<span class="text-emerald-600">.MY</span></span>
                             <div class="flex items-center gap-1.5 mt-1">
-                                <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase hidden xs:inline">IIUM Pagoh</span>
+                                <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase hidden sm:inline">IIUM Pagoh</span>
                                 <span id="dbStatusBadge" class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 truncate">Connecting...</span>
                             </div>
                         </div>
@@ -89,10 +95,16 @@
                     </select>
                 </div>
 
-                <!-- Auth / Profile / Sync Buttons (44x44px touch targets) -->
-                <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                <!-- Auth / Contacts / History / Sync Buttons (44x44px touch targets) -->
+                <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     <button onclick="loadVendors()" class="touch-target flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-600 transition-colors" title="Sync Live Database" aria-label="Sync Database">
                         <i data-lucide="refresh-cw" id="refreshIcon" class="w-5 h-5"></i>
+                    </button>
+
+                    <!-- Public Admin & Emergency Contacts Trigger -->
+                    <button onclick="openModal('contactsModal')" class="touch-target flex items-center justify-center gap-1.5 px-2.5 rounded-xl hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 transition-colors relative" title="Admin & Emergency Contacts" aria-label="Admin & Emergency Contacts">
+                        <i data-lucide="Headset" class="w-5 h-5 text-emerald-600"></i>
+                        <span class="hidden lg:inline text-xs font-bold">Support</span>
                     </button>
 
                     <button onclick="openModal('historyModal')" class="touch-target flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-600 transition-colors relative" title="Recently Contacted" aria-label="Recently Contacted">
@@ -131,25 +143,26 @@
     </header>
 
     <!-- ==================== MAIN CONTAINER ==================== -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+    <main class="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6 flex-1">
 
         <!-- ==================== HOME PAGE ==================== -->
         <section id="page-home" class="space-y-6 sm:space-y-8">
             
-            <!-- DYNAMIC FULL-WIDTH HERO CAROUSEL -->
-            <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 text-white shadow-xl min-h-[260px] sm:min-h-[320px] flex items-center">
-                <div id="heroCarouselTrack" class="w-full h-full"></div>
+            <!-- 1. MOBILE-FIXED DYNAMIC FULL-WIDTH HERO CAROUSEL WITH TOUCH SWIPE -->
+            <div id="heroCarouselContainer" class="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 text-white shadow-xl min-h-[220px] sm:min-h-[320px] block">
+                <!-- Slides Track (Explicit min-height so mobile slides never collapse or clip) -->
+                <div id="heroCarouselTrack" class="relative w-full min-h-[220px] sm:min-h-[320px] block"></div>
 
-                <!-- 44x44px Prev / Next Controls -->
-                <button onclick="prevHeroSlide()" aria-label="Previous Slide" class="touch-target absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur transition-all active:scale-95">
+                <!-- High Z-Index Prev / Next Controls (44x44px touch targets) -->
+                <button type="button" onclick="prevHeroSlide()" aria-label="Previous Slide" class="touch-target absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-30 rounded-full bg-slate-950/70 hover:bg-slate-950 text-white border border-white/15 flex items-center justify-center backdrop-blur-md shadow-lg transition-all active:scale-95">
                     <i data-lucide="chevron-left" class="w-5 h-5"></i>
                 </button>
-                <button onclick="nextHeroSlide()" aria-label="Next Slide" class="touch-target absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-20 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center backdrop-blur transition-all active:scale-95">
+                <button type="button" onclick="nextHeroSlide()" aria-label="Next Slide" class="touch-target absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-30 rounded-full bg-slate-950/70 hover:bg-slate-950 text-white border border-white/15 flex items-center justify-center backdrop-blur-md shadow-lg transition-all active:scale-95">
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
 
-                <!-- Carousel Dots -->
-                <div id="heroCarouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2"></div>
+                <!-- High Contrast Carousel Pagination Dots -->
+                <div id="heroCarouselDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-950/50 backdrop-blur-sm"></div>
             </div>
 
             <!-- CATEGORY SECTION NAVIGATION -->
@@ -341,9 +354,9 @@
                 <!-- LEFT COLUMN (7 cols): MULTI-PRODUCT CATALOG & PROFILE SETTINGS -->
                 <div class="lg:col-span-7 space-y-6">
 
-                    <!-- 3. MULTI-PRODUCT MANAGEMENT (POST-REGISTRATION EDIT LISTING) -->
+                    <!-- MULTI-PRODUCT MANAGEMENT (POST-REGISTRATION EDIT LISTING) -->
                     <div id="dashProductsSection" class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-5">
-                        <div class="flex flex-col xs:flex-row xs:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                             <div>
                                 <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
                                     <i data-lucide="package" class="w-5 h-5 text-emerald-600"></i> Products & Menu Catalog
@@ -485,8 +498,8 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp Phone *</label>
-                                    <input type="tel" id="dashInputPhone" required class="w-full px-3.5 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp Phone (+60) *</label>
+                                    <input type="tel" id="dashInputPhone" required oninput="formatMalaysianPhoneInput(this)" onblur="formatMalaysianPhoneInput(this, true)" placeholder="+60123456789" class="w-full px-3.5 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
                                 </div>
                             </div>
 
@@ -514,7 +527,7 @@
                                 </div>
                             </div>
 
-                            <!-- 4. CUSTOM WHATSAPP MESSAGE CONFIGURATION -->
+                            <!-- CUSTOM WHATSAPP MESSAGE CONFIGURATION -->
                             <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-3">
                                 <div class="flex items-center justify-between gap-2">
                                     <label class="block text-xs font-extrabold text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
@@ -589,7 +602,7 @@
             </div>
         </section>
 
-        <!-- ==================== ADMIN USER MANAGEMENT PANEL ==================== -->
+        <!-- ==================== ADMIN USER, BANNER & CONTACTS MANAGEMENT PANEL ==================== -->
         <section id="page-admin" class="hidden space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900 text-white p-5 sm:p-6 rounded-2xl sm:rounded-3xl shadow-xl">
                 <div class="flex items-center gap-3">
@@ -598,7 +611,7 @@
                     </div>
                     <div>
                         <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400">System Administrator (012345678)</span>
-                        <h2 class="text-xl sm:text-2xl font-extrabold">Admin User & Banner Management</h2>
+                        <h2 class="text-xl sm:text-2xl font-extrabold">Admin Hub & Directory Control</h2>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
@@ -612,6 +625,69 @@
                         Log Out
                     </button>
                 </div>
+            </div>
+
+            <!-- 2. ADMIN & EMERGENCY CONTACTS DIRECTORY PANEL (CRUD) -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                            <i data-lucide="phone-call" class="w-5 h-5 text-emerald-600"></i> Admin & Emergency Contacts Directory
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Manage official campus support, admin helpdesk, and security contacts visible to students</p>
+                    </div>
+                    <button type="button" onclick="openAdminContactForm()" class="touch-target px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-all self-start sm:self-auto">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add Contact
+                    </button>
+                </div>
+
+                <!-- Collapsible Add / Edit Admin Contact Form -->
+                <form id="adminContactForm" onsubmit="handleSaveAdminContact(event)" class="hidden bg-slate-50 rounded-2xl p-4 sm:p-5 border border-emerald-200 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 id="adminContactFormTitle" class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                            <i data-lucide="user-plus" class="w-4 h-4 text-emerald-600"></i> Add Official Contact
+                        </h4>
+                        <button type="button" onclick="closeAdminContactForm()" class="touch-target flex items-center justify-center text-slate-400 hover:text-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <input type="hidden" id="adminContactEditId" value="">
+
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Contact Name / Office *</label>
+                            <input type="text" id="adminContactName" required placeholder="e.g. Ustaz Ahmad / Mahallah Office" class="w-full px-3.5 min-h-[44px] bg-white border border-slate-200 rounded-xl text-sm focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Department / Role *</label>
+                            <input type="text" id="adminContactRole" required placeholder="e.g. Campus Security / Admin Support" class="w-full px-3.5 min-h-[44px] bg-white border border-slate-200 rounded-xl text-sm focus:border-emerald-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">WhatsApp Phone (+60) *</label>
+                            <input type="tel" id="adminContactPhone" required oninput="formatMalaysianPhoneInput(this)" onblur="formatMalaysianPhoneInput(this, true)" placeholder="+60123456789" class="w-full px-3.5 min-h-[44px] bg-white border border-slate-200 rounded-xl text-sm focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Official Email (Optional)</label>
+                            <input type="email" id="adminContactEmail" placeholder="e.g. support@iiumpagoh.edu.my" class="w-full px-3.5 min-h-[44px] bg-white border border-slate-200 rounded-xl text-sm focus:border-emerald-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-1">
+                        <button type="button" onclick="closeAdminContactForm()" class="touch-target px-4 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl">
+                            Cancel
+                        </button>
+                        <button type="submit" id="adminContactSaveBtn" class="touch-target px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm">
+                            Save & Sync Contact
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Admin Contacts Grid -->
+                <div id="adminContactsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
             <!-- Admin Hero Banner Uploader -->
@@ -658,7 +734,43 @@
 
     </main>
 
+    <!-- ==================== FOOTER WITH PUBLIC CONTACTS ACCESS ==================== -->
+    <footer class="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-200/80 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+            <span class="font-extrabold text-slate-800">GengHustle<span class="text-emerald-600">.MY</span></span>
+            <span>•</span>
+            <span>IIUM Pagoh Studentpreneur Directory</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <button onclick="openModal('contactsModal')" class="touch-target px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 text-slate-700 font-bold flex items-center gap-1.5 shadow-sm transition-colors">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-600"></i> Admin & Emergency Contacts
+            </button>
+        </div>
+    </footer>
+
     <!-- ==================== MODALS (MOBILE SHEET & STICKY FOOTER OPTIMIZED) ==================== -->
+
+    <!-- PUBLIC ADMIN & EMERGENCY CONTACTS DIRECTORY MODAL -->
+    <div id="contactsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-xl w-full p-5 sm:p-6 shadow-2xl relative max-h-[88dvh] flex flex-col safe-bottom">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="phone-call" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-900">Admin & Emergency Contacts</h3>
+                        <p class="text-xs text-slate-500">Official IIUM Pagoh Hub support & campus assistance</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('contactsModal')" aria-label="Close" class="touch-target flex items-center justify-center text-slate-400 hover:text-slate-600 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div id="publicContactsList" class="space-y-3 overflow-y-auto flex-1 overscroll-contain py-4"></div>
+        </div>
+    </div>
 
     <!-- BUSINESS / MULTI-PRODUCT DETAIL MODAL -->
     <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center sm:p-4">
@@ -731,7 +843,7 @@
         </div>
     </div>
 
-    <!-- 2. STREAMLINED STUDENTPRENEUR REGISTER / LOGIN MODAL -->
+    <!-- STREAMLINED STUDENTPRENEUR REGISTER / LOGIN MODAL -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full max-h-[92dvh] flex flex-col overflow-hidden shadow-2xl relative">
             
@@ -801,11 +913,11 @@
                         </div>
                     </div>
 
-                    <!-- WhatsApp Phone & 4-Digit PIN -->
+                    <!-- WhatsApp Phone (+60 Auto-Formatted) & 4-Digit PIN -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone *</label>
-                            <input type="tel" id="regPhone" required placeholder="e.g. 60123456789" class="w-full px-3.5 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone (+60) *</label>
+                            <input type="tel" id="regPhone" required value="+60" oninput="formatMalaysianPhoneInput(this)" onblur="formatMalaysianPhoneInput(this, true)" placeholder="+60123456789" class="w-full px-3.5 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">4-Digit Security PIN *</label>
@@ -857,8 +969,8 @@
                         Invalid Account/Phone Number or PIN.
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Account Number / WhatsApp Phone</label>
-                        <input type="tel" id="loginPhone" required placeholder="Enter phone or Admin account number" class="w-full px-4 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone (+60) or Admin ID</label>
+                        <input type="tel" id="loginPhone" required oninput="formatMalaysianPhoneInput(this)" onblur="formatMalaysianPhoneInput(this, true)" placeholder="+60123456789" class="w-full px-4 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">4-Digit Passcode / PIN</label>
@@ -900,13 +1012,33 @@
 
         const DEFAULT_LOGO = "https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=400&q=80";
         const DEFAULT_WA_TEMPLATE = "Hi {business_name}, I would like to order {product_name} ({price} {pricing_unit}). Notes: {customer_notes}";
+        const SYSTEM_META_ID = "__gh_system_meta__";
 
-        // Seeded Admin Account
+        // Seeded Admin Account (Supports 012345678 or auto-prefixed +6012345678)
         const ADMIN_ACCOUNT = {
             phone: "012345678",
+            sanitizedPhone: "6012345678",
             pin: "0987",
             role: "admin"
         };
+
+        // Default Seeded Admin & Emergency Contacts
+        const DEFAULT_ADMIN_CONTACTS = [
+            {
+                id: "contact-default-1",
+                name: "GengHustle Admin Helpdesk",
+                role: "Platform Support & Verification",
+                phone: "+60123456789",
+                email: "admin@genghustle.my"
+            },
+            {
+                id: "contact-default-2",
+                name: "IIUM Pagoh Security Office (OSeM)",
+                role: "24/7 Campus Security & Emergency",
+                phone: "+6069742600",
+                email: "osem.pagoh@iium.edu.my"
+            }
+        ];
 
         // Purge legacy demo storage keys
         localStorage.removeItem('gh_listings_v1');
@@ -915,6 +1047,7 @@
         // Application State
         let listings = JSON.parse(localStorage.getItem('gh_listings_v2')) || [];
         let adminBanners = JSON.parse(localStorage.getItem('gh_admin_banners_v2')) || [];
+        let adminContacts = JSON.parse(localStorage.getItem('gh_admin_contacts_v2')) || DEFAULT_ADMIN_CONTACTS;
         let recentHistory = JSON.parse(localStorage.getItem('gh_history_v2')) || [];
         let session = JSON.parse(localStorage.getItem('gh_session_v2')) || null;
 
@@ -928,11 +1061,70 @@
         let heroInterval = null;
         let editingVendorId = null;
 
+        // Touch Swipe State for Hero Carousel
+        let heroTouchStartX = 0;
+        let heroTouchStartY = 0;
+        let heroTouchEndX = 0;
+        let heroTouchEndY = 0;
+
         // ============================================================================
-        // SCHEMA MIGRATION: NORMALIZE LEGACY SINGLE-ITEM VENDORS TO MULTI-PRODUCT
+        // 3. AUTOMATIC MALAYSIAN COUNTRY CODE (+60) PHONE FORMATTING & SANITIZATION
+        // ============================================================================
+        function sanitizePhoneToWaDigits(rawInput) {
+            if (!rawInput) return "";
+            let digits = String(rawInput).replace(/\D/g, '');
+            if (!digits) return "";
+
+            // Strip leading zeros (e.g. 0123456789 -> 123456789)
+            digits = digits.replace(/^0+/, '');
+
+            // Prepend Malaysia country code 60 if not already present
+            if (digits.startsWith('60')) {
+                // Handle accidental 60012... -> 6012...
+                digits = '60' + digits.slice(2).replace(/^0+/, '');
+            } else {
+                digits = '60' + digits;
+            }
+            return digits;
+        }
+
+        function displayFormattedPhone(rawInput) {
+            const waDigits = sanitizePhoneToWaDigits(rawInput);
+            return waDigits ? `+${waDigits}` : "+60";
+        }
+
+        function formatMalaysianPhoneInput(inputEl, isBlur = false) {
+            if (!inputEl) return;
+            let raw = inputEl.value;
+
+            // Restrict characters strictly to numeric digits and leading +
+            let digits = raw.replace(/\D/g, '');
+
+            if (!digits) {
+                inputEl.value = isBlur ? "" : "+60";
+                return;
+            }
+
+            // Strip any leading zeros (e.g., 0123456789 -> 123456789)
+            if (digits.startsWith('0')) {
+                digits = digits.replace(/^0+/, '');
+            } else if (digits.startsWith('60')) {
+                digits = digits.slice(2).replace(/^0+/, '');
+            }
+
+            inputEl.value = '+60' + digits;
+        }
+
+        // ============================================================================
+        // SCHEMA MIGRATION: NORMALIZE VENDORS & SYSTEM META CARRIER
         // ============================================================================
         function normalizeVendorSchema(vendor) {
-            if (!vendor) return vendor;
+            if (!vendor || vendor.id === SYSTEM_META_ID) return vendor;
+
+            // Format vendor phone to clean WA digits (601...)
+            if (vendor.phone) {
+                vendor.phone = sanitizePhoneToWaDigits(vendor.phone);
+            }
 
             // Migrate legacy single-product `details` into `products` array if needed
             if (!Array.isArray(vendor.products)) {
@@ -963,7 +1155,6 @@
                 vendor.whatsapp_template = DEFAULT_WA_TEMPLATE;
             }
 
-            // Keep legacy `details` synced with the primary product for backward compatibility
             const firstProd = vendor.products[0];
             if (firstProd) {
                 vendor.details = {
@@ -989,24 +1180,26 @@
         }
 
         function saveState() {
-            listings = listings.map(normalizeVendorSchema);
+            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
             localStorage.setItem('gh_listings_v2', JSON.stringify(listings));
             localStorage.setItem('gh_admin_banners_v2', JSON.stringify(adminBanners));
+            localStorage.setItem('gh_admin_contacts_v2', JSON.stringify(adminContacts));
             localStorage.setItem('gh_history_v2', JSON.stringify(recentHistory));
             localStorage.setItem('gh_session_v2', JSON.stringify(session));
         }
 
         // INITIALIZE APP ON LOAD
         document.addEventListener('DOMContentLoaded', async () => {
-            listings = listings.map(normalizeVendorSchema);
-            await loadVendors();
+            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
+            initHeroTouchSwipe();
             renderAll();
             startHeroAutoplay();
+            await loadVendors();
             lucide.createIcons();
         });
 
         // ============================================================================
-        // CLOUDFLARE WORKER -> GITHUB REST API READ & WRITE ENGINE
+        // CLOUDFLARE WORKER -> GITHUB REST API READ & WRITE ENGINE (WITH CONTACTS SYNC)
         // ============================================================================
         async function loadVendors() {
             const badge = document.getElementById('dbStatusBadge');
@@ -1029,7 +1222,20 @@
                 const parsed = JSON.parse(rawContent);
 
                 if (Array.isArray(parsed)) {
-                    listings = parsed.map(normalizeVendorSchema);
+                    // Extract optional system metadata record (Admin Contacts & Admin Banners)
+                    const metaRecord = parsed.find(item => item && item.id === SYSTEM_META_ID);
+                    if (metaRecord) {
+                        if (Array.isArray(metaRecord.adminContacts) && metaRecord.adminContacts.length > 0) {
+                            adminContacts = metaRecord.adminContacts;
+                        }
+                        if (Array.isArray(metaRecord.adminBanners)) {
+                            adminBanners = metaRecord.adminBanners;
+                        }
+                    }
+
+                    listings = parsed
+                        .filter(item => item && item.id !== SYSTEM_META_ID)
+                        .map(normalizeVendorSchema);
                     saveState();
                 }
 
@@ -1040,6 +1246,7 @@
                 console.warn("Proxy load notice:", err.message);
                 badge.innerText = "Local Fallback";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600";
+                renderAll();
             } finally {
                 if (refreshIcon) refreshIcon.classList.remove('animate-spin');
             }
@@ -1058,8 +1265,20 @@
                 }
             }
 
-            listings = listings.map(normalizeVendorSchema);
-            const jsonString = JSON.stringify(listings, null, 2);
+            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
+
+            // Bundle vendor listings + system metadata carrier so Admin Contacts & Banners sync to GitHub
+            const repoDataPayload = [
+                ...listings,
+                {
+                    id: SYSTEM_META_ID,
+                    adminContacts,
+                    adminBanners,
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            const jsonString = JSON.stringify(repoDataPayload, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
             const payload = {
@@ -1094,6 +1313,7 @@
             renderHomeGrid();
             applyListingsFilter();
             renderHistoryModal();
+            renderPublicContactsModal();
             if (session && session.role === 'admin') {
                 renderAdminPanel();
             }
@@ -1101,28 +1321,30 @@
         }
 
         // ============================================================================
-        // DYNAMIC FULL-WIDTH HERO CAROUSEL
+        // 1. MOBILE-FIXED DYNAMIC HERO CAROUSEL & TOUCH SWIPE GESTURES
         // ============================================================================
         function getActiveBanners() {
             const slides = [];
             adminBanners.forEach(b => {
-                slides.push({
-                    id: b.id,
-                    title: b.title || "Campus Highlight",
-                    subtitle: "Official IIUM Pagoh Hub Announcement",
-                    badge: "Admin Banner",
-                    image: b.image,
-                    vendorId: null
-                });
+                if (b && b.image) {
+                    slides.push({
+                        id: b.id,
+                        title: b.title || "Campus Highlight",
+                        subtitle: "Official IIUM Pagoh Hub Announcement",
+                        badge: "Campus Announcement",
+                        image: b.image,
+                        vendorId: null
+                    });
+                }
             });
             listings.forEach(v => {
-                if (v.poster && v.poster.trim() !== "") {
+                if (v && v.id !== SYSTEM_META_ID && v.poster && v.poster.trim() !== "") {
                     const summaryPrice = (v.products && v.products[0]) ? v.products[0].formattedPrice : (v.details?.formattedPrice || 'View Store');
                     slides.push({
                         id: `vendor-${v.id}`,
                         title: v.name,
                         subtitle: `${v.category} • ${v.block} • ${summaryPrice}`,
-                        badge: v.status,
+                        badge: v.status || "Featured Store",
                         image: v.poster,
                         vendorId: v.id
                     });
@@ -1134,50 +1356,54 @@
         function renderHeroCarousel() {
             const track = document.getElementById('heroCarouselTrack');
             const dots = document.getElementById('heroCarouselDots');
+            if (!track || !dots) return;
+
             const slides = getActiveBanners();
 
             if (slides.length === 0) {
                 track.innerHTML = `
-                    <div class="p-6 sm:p-12 relative z-10 flex flex-col items-start justify-center min-h-[260px] sm:min-h-[320px] bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900">
-                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] font-semibold uppercase tracking-wider mb-3">
+                    <div class="w-full min-h-[220px] sm:min-h-[320px] px-12 py-6 sm:p-12 relative z-10 flex flex-col items-start justify-center bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900">
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-2.5">
                             IIUM Pagoh Directory
                         </span>
-                        <h1 class="text-xl sm:text-4xl font-extrabold tracking-tight text-white max-w-2xl">
+                        <h1 class="text-lg sm:text-4xl font-extrabold tracking-tight text-white max-w-2xl leading-snug">
                             Support All Studentpreneurs in IIUM Pagoh
                         </h1>
-                        <p class="text-slate-300 text-xs sm:text-sm mt-2 max-w-xl">
-                            Direct WhatsApp ordering with zero middleman fees. Register your store in 30 seconds and manage your product catalog!
+                        <p class="text-slate-300 text-xs sm:text-sm mt-1.5 max-w-xl line-clamp-2 sm:line-clamp-none">
+                            Direct WhatsApp ordering with zero middleman fees. Swipe announcements or register your campus store in 30 seconds!
                         </p>
-                        <div class="mt-5 flex flex-wrap gap-2.5 w-full sm:w-auto">
-                            <button onclick="filterCategory('All')" class="touch-target flex-1 sm:flex-initial px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm rounded-xl transition-all">
+                        <div class="mt-4 flex flex-wrap gap-2 w-full sm:w-auto">
+                            <button onclick="filterCategory('All')" class="touch-target px-4 sm:px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm rounded-xl transition-all">
                                 Browse Directory
                             </button>
-                            <button onclick="openAuthModal('register')" class="touch-target flex-1 sm:flex-initial px-5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm rounded-xl border border-white/10 transition-all">
+                            <button onclick="openAuthModal('register')" class="touch-target px-4 sm:px-5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm rounded-xl border border-white/10 transition-all">
                                 Register Business
                             </button>
                         </div>
                     </div>
                 `;
+                dots.classList.add('hidden');
                 dots.innerHTML = '';
                 return;
             }
 
             if (currentHeroSlide >= slides.length) currentHeroSlide = 0;
+            if (currentHeroSlide < 0) currentHeroSlide = slides.length - 1;
             const active = slides[currentHeroSlide];
 
             track.innerHTML = `
-                <div class="relative w-full min-h-[260px] sm:min-h-[320px] flex items-end p-5 sm:p-10">
-                    <img src="${active.image}" alt="${active.title}" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
-                    <div class="relative z-10 max-w-2xl space-y-2 pb-4 sm:pb-0">
-                        <span class="px-2.5 py-1 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider inline-block">
+                <div class="relative w-full min-h-[220px] sm:min-h-[320px] flex flex-col justify-end px-12 pb-11 pt-6 sm:p-10 sm:pb-12 overflow-hidden">
+                    <img src="${active.image}" alt="${active.title}" class="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950/20 z-10 pointer-events-none"></div>
+                    <div class="relative z-20 max-w-2xl space-y-1.5">
+                        <span class="px-2.5 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider inline-block shadow">
                             ${active.badge}
                         </span>
-                        <h2 class="text-xl sm:text-4xl font-extrabold text-white leading-tight">${active.title}</h2>
-                        <p class="text-xs sm:text-sm text-slate-200">${active.subtitle}</p>
+                        <h2 class="text-lg sm:text-4xl font-extrabold text-white leading-tight line-clamp-2">${active.title}</h2>
+                        <p class="text-xs sm:text-sm text-slate-200 line-clamp-1">${active.subtitle}</p>
                         ${active.vendorId ? `
-                            <div class="pt-1">
-                                <button onclick="openDetailModal(${active.vendorId})" class="touch-target px-4 bg-white text-slate-900 hover:bg-emerald-400 font-bold text-xs rounded-xl transition-all">
+                            <div class="pt-1.5">
+                                <button onclick="openDetailModal(${active.vendorId})" class="touch-target px-4 bg-white text-slate-900 hover:bg-emerald-400 font-bold text-xs rounded-xl transition-all shadow">
                                     View Store & Menu
                                 </button>
                             </div>
@@ -1186,9 +1412,44 @@
                 </div>
             `;
 
+            dots.classList.remove('hidden');
             dots.innerHTML = slides.map((_, idx) => `
-                <button onclick="goToHeroSlide(${idx})" aria-label="Go to slide ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === currentHeroSlide ? 'w-7 bg-emerald-400' : 'w-2.5 bg-white/50 hover:bg-white'}"></button>
+                <button type="button" onclick="goToHeroSlide(${idx})" aria-label="Go to slide ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === currentHeroSlide ? 'w-7 bg-emerald-400' : 'w-2.5 bg-white/60 hover:bg-white'}"></button>
             `).join('');
+        }
+
+        function initHeroTouchSwipe() {
+            const track = document.getElementById('heroCarouselTrack');
+            if (!track) return;
+
+            track.addEventListener('touchstart', (e) => {
+                if (!e.changedTouches || !e.changedTouches[0]) return;
+                heroTouchStartX = e.changedTouches[0].screenX;
+                heroTouchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            track.addEventListener('touchend', (e) => {
+                if (!e.changedTouches || !e.changedTouches[0]) return;
+                heroTouchEndX = e.changedTouches[0].screenX;
+                heroTouchEndY = e.changedTouches[0].screenY;
+                handleHeroSwipeGesture();
+            }, { passive: true });
+        }
+
+        function handleHeroSwipeGesture() {
+            const deltaX = heroTouchEndX - heroTouchStartX;
+            const deltaY = heroTouchEndY - heroTouchStartY;
+            const swipeThreshold = 40;
+
+            // Trigger slide change if horizontal swipe exceeds threshold and dominates vertical scroll
+            if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX < 0) {
+                    nextHeroSlide();
+                } else {
+                    prevHeroSlide();
+                }
+                startHeroAutoplay(); // Reset autoplay timer after manual swipe
+            }
         }
 
         function nextHeroSlide() {
@@ -1210,6 +1471,7 @@
         function goToHeroSlide(index) {
             currentHeroSlide = index;
             renderHeroCarousel();
+            startHeroAutoplay();
             lucide.createIcons();
         }
 
@@ -1218,6 +1480,141 @@
             heroInterval = setInterval(() => {
                 nextHeroSlide();
             }, 5000);
+        }
+
+        // ============================================================================
+        // 2. ADMIN & EMERGENCY CONTACTS DIRECTORY CRUD LOGIC
+        // ============================================================================
+        function openAdminContactForm(contactId = null) {
+            const form = document.getElementById('adminContactForm');
+            const titleEl = document.getElementById('adminContactFormTitle');
+            const idInput = document.getElementById('adminContactEditId');
+            const nameInput = document.getElementById('adminContactName');
+            const roleInput = document.getElementById('adminContactRole');
+            const phoneInput = document.getElementById('adminContactPhone');
+            const emailInput = document.getElementById('adminContactEmail');
+
+            form.classList.remove('hidden');
+
+            if (contactId) {
+                const existing = adminContacts.find(c => c.id === contactId);
+                if (!existing) return;
+                titleEl.innerHTML = `<i data-lucide="edit-3" class="w-4 h-4 text-emerald-600"></i> Edit Official Contact`;
+                idInput.value = existing.id;
+                nameInput.value = existing.name || '';
+                roleInput.value = existing.role || '';
+                phoneInput.value = displayFormattedPhone(existing.phone);
+                emailInput.value = existing.email || '';
+            } else {
+                titleEl.innerHTML = `<i data-lucide="user-plus" class="w-4 h-4 text-emerald-600"></i> Add Official Contact`;
+                idInput.value = '';
+                nameInput.value = '';
+                roleInput.value = '';
+                phoneInput.value = '+60';
+                emailInput.value = '';
+            }
+
+            lucide.createIcons();
+            nameInput.focus();
+        }
+
+        function closeAdminContactForm() {
+            const form = document.getElementById('adminContactForm');
+            if (form) form.classList.add('hidden');
+        }
+
+        async function handleSaveAdminContact(e) {
+            e.preventDefault();
+            const saveBtn = document.getElementById('adminContactSaveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Saving...";
+
+            const editId = document.getElementById('adminContactEditId').value;
+            const name = document.getElementById('adminContactName').value.trim();
+            const role = document.getElementById('adminContactRole').value.trim();
+            const rawPhone = document.getElementById('adminContactPhone').value;
+            const formattedPhone = displayFormattedPhone(rawPhone);
+            const email = document.getElementById('adminContactEmail').value.trim();
+
+            if (editId) {
+                const idx = adminContacts.findIndex(c => c.id === editId);
+                if (idx >= 0) {
+                    adminContacts[idx] = { ...adminContacts[idx], name, role, phone: formattedPhone, email };
+                }
+            } else {
+                adminContacts.push({
+                    id: 'contact-' + Date.now(),
+                    name,
+                    role,
+                    phone: formattedPhone,
+                    email
+                });
+            }
+
+            saveState();
+            try {
+                await commitVendorsToGitHub(`Update admin contact: ${name}`);
+            } catch (err) {
+                console.warn("Contact saved locally, cloud sync notice:", err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerText = "Save & Sync Contact";
+                closeAdminContactForm();
+                renderAll();
+            }
+        }
+
+        async function deleteAdminContact(contactId) {
+            const target = adminContacts.find(c => c.id === contactId);
+            if (!target) return;
+            if (!confirm(`Remove "${target.name}" from the Admin & Emergency Contacts directory?`)) return;
+
+            adminContacts = adminContacts.filter(c => c.id !== contactId);
+            saveState();
+            try {
+                await commitVendorsToGitHub(`Delete admin contact: ${target.name}`);
+            } catch (err) {
+                console.warn("Contact deleted locally:", err.message);
+            }
+            renderAll();
+        }
+
+        function renderPublicContactsModal() {
+            const container = document.getElementById('publicContactsList');
+            if (!container) return;
+
+            if (!Array.isArray(adminContacts) || adminContacts.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">No official contacts listed yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = adminContacts.map(c => {
+                const cleanWaDigits = sanitizePhoneToWaDigits(c.phone);
+                const displayPhone = displayFormattedPhone(c.phone);
+                return `
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="space-y-1 min-w-0">
+                            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
+                            <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
+                            <div class="text-xs text-slate-600 space-y-0.5">
+                                <p class="font-semibold">${displayPhone}</p>
+                                ${c.email ? `<p class="text-slate-500 truncate">${c.email}</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            ${c.email ? `
+                                <a href="mailto:${c.email}" class="touch-target px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-xs flex items-center gap-1.5">
+                                    <i data-lucide="mail" class="w-4 h-4"></i> Email
+                                </a>
+                            ` : ''}
+                            <a href="https://wa.me/${cleanWaDigits}" target="_blank" rel="noopener noreferrer" class="touch-target px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
+                                <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
         }
 
         // ============================================================================
@@ -1528,7 +1925,7 @@
         }
 
         // ============================================================================
-        // 4. PUBLIC DETAIL MODAL & DYNAMIC WHATSAPP MESSAGE PARSER
+        // PUBLIC DETAIL MODAL & DYNAMIC WHATSAPP MESSAGE PARSER
         // ============================================================================
         function openDetailModal(id) {
             selectedBusiness = listings.find(b => b.id === id);
@@ -1537,7 +1934,6 @@
 
             const b = selectedBusiness;
             const prods = b.products || [];
-            // Select first in-stock product by default
             const firstInStockIdx = prods.findIndex(p => p.inStock !== false);
             selectedProductIndex = firstInStockIdx >= 0 ? firstInStockIdx : 0;
 
@@ -1548,7 +1944,7 @@
             document.getElementById('modalCategoryTag').innerText = b.category;
             document.getElementById('modalBlock').innerHTML = `<i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600"></i> ${b.block} • IIUM Pagoh`;
             document.getElementById('modalSchedule').innerText = b.schedule;
-            document.getElementById('modalPhone').innerText = `+${b.phone}`;
+            document.getElementById('modalPhone').innerText = displayFormattedPhone(b.phone);
             document.getElementById('modalCustomerNotes').value = '';
 
             const isAvail = b.status === "Available";
@@ -1620,7 +2016,7 @@
             updateModalWhatsappLink();
         }
 
-        // Parse custom vendor WhatsApp template with dynamic variables
+        // Parse custom vendor WhatsApp template with clean numeric 6012... phone format
         function buildCustomWhatsappUrl(vendor, product, customerNotes) {
             const template = (vendor.whatsapp_template && vendor.whatsapp_template.trim() !== "")
                 ? vendor.whatsapp_template
@@ -1640,8 +2036,8 @@
                 .replace(/\s+\)/g, ')')
                 .trim();
 
-            const cleanPhone = (vendor.phone || "").replace(/\D/g, '');
-            return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(parsedMessage)}`;
+            const cleanWaDigits = sanitizePhoneToWaDigits(vendor.phone);
+            return `https://wa.me/${cleanWaDigits}?text=${encodeURIComponent(parsedMessage)}`;
         }
 
         function updateModalWhatsappLink() {
@@ -1676,10 +2072,12 @@
         }
 
         // ============================================================================
-        // 2. SIMPLIFIED ONBOARDING FLOW (BASIC PROFILE ONLY -> REDIRECT TO DASHBOARD)
+        // SIMPLIFIED ONBOARDING FLOW (BASIC PROFILE ONLY -> REDIRECT TO DASHBOARD)
         // ============================================================================
         function openAuthModal(defaultTab = 'register') {
             switchAuthTab(defaultTab);
+            const regPhoneEl = document.getElementById('regPhone');
+            if (regPhoneEl && !regPhoneEl.value) regPhoneEl.value = '+60';
             openModal('authModal');
         }
 
@@ -1712,7 +2110,7 @@
             const name = document.getElementById('regName').value.trim();
             const category = document.getElementById('regCategory').value;
             const block = document.getElementById('regBlock').value;
-            const phone = document.getElementById('regPhone').value.replace(/\D/g, '');
+            const phone = sanitizePhoneToWaDigits(document.getElementById('regPhone').value);
             const pin = document.getElementById('regPin').value.trim();
 
             const selectedDays = Array.from(document.querySelectorAll('.reg-day-cb:checked')).map(cb => cb.value);
@@ -1751,10 +2149,10 @@
                 saveState();
 
                 e.target.reset();
+                document.getElementById('regPhone').value = '+60';
                 closeModal('authModal');
                 renderAll();
 
-                // Post-Signup Redirect directly to Vendor Dashboard / Edit Listing view
                 openDashboard(createdVendor.id, true);
             } catch (err) {
                 alert("Cloud Sync Notice: " + err.message);
@@ -1768,10 +2166,12 @@
         function handleLoginSubmit(e) {
             e.preventDefault();
             const rawPhone = document.getElementById('loginPhone').value.trim();
-            const cleanPhone = rawPhone.replace(/\D/g, '');
+            const cleanDigits = rawPhone.replace(/\D/g, '');
+            const sanitizedPhone = sanitizePhoneToWaDigits(rawPhone);
             const pin = document.getElementById('loginPin').value.trim();
 
-            if ((rawPhone === ADMIN_ACCOUNT.phone || cleanPhone === ADMIN_ACCOUNT.phone) && pin === ADMIN_ACCOUNT.pin) {
+            // 1. Check Seeded Admin Account (Supports 012345678 or auto-formatted +6012345678)
+            if ((cleanDigits === ADMIN_ACCOUNT.phone || sanitizedPhone === ADMIN_ACCOUNT.sanitizedPhone) && pin === ADMIN_ACCOUNT.pin) {
                 session = { role: 'admin', vendorId: null };
                 saveState();
                 e.target.reset();
@@ -1782,7 +2182,12 @@
                 return;
             }
 
-            const matched = listings.find(v => v.phone.replace(/\D/g, '') === cleanPhone && String(v.pin) === pin);
+            // 2. Check Registered Vendor Credentials
+            const matched = listings.find(v => {
+                const vDigits = sanitizePhoneToWaDigits(v.phone);
+                return vDigits === sanitizedPhone && String(v.pin) === pin;
+            });
+
             if (!matched) {
                 document.getElementById('loginErrorMsg').classList.remove('hidden');
                 return;
@@ -1804,7 +2209,7 @@
         }
 
         // ============================================================================
-        // 3. VENDOR DASHBOARD & MULTI-PRODUCT CRUD MANAGEMENT
+        // VENDOR DASHBOARD & MULTI-PRODUCT CRUD MANAGEMENT
         // ============================================================================
         function openDashboard(vendorId, autoOpenNewProduct = false) {
             const targetId = vendorId || (session && session.vendorId);
@@ -1823,7 +2228,6 @@
             document.getElementById('dashVendorBlock').innerText = `${vendor.block} • IIUM Pagoh`;
             document.getElementById('dashVendorLogo').src = vendor.logo || DEFAULT_LOGO;
 
-            // Onboarding welcome banner if vendor has 0 products
             const onboardBanner = document.getElementById('dashOnboardingBanner');
             if ((vendor.products || []).length === 0) {
                 onboardBanner.classList.remove('hidden');
@@ -1851,7 +2255,7 @@
             document.getElementById('dashInputName').value = vendor.name;
             document.getElementById('dashInputBlock').value = vendor.block || 'Block 1';
             document.getElementById('dashInputCategory').value = vendor.category || 'Food & Bites';
-            document.getElementById('dashInputPhone').value = vendor.phone || '';
+            document.getElementById('dashInputPhone').value = displayFormattedPhone(vendor.phone);
             document.getElementById('dashInputWaTemplate').value = vendor.whatsapp_template || DEFAULT_WA_TEMPLATE;
 
             document.querySelectorAll('.dash-day-cb').forEach(cb => {
@@ -2077,7 +2481,7 @@
         }
 
         // ============================================================================
-        // 4. WHATSAPP TEMPLATE HELPERS & PROFILE SETTINGS
+        // WHATSAPP TEMPLATE HELPERS & PROFILE SETTINGS
         // ============================================================================
         function insertTemplateVar(variableToken) {
             const textarea = document.getElementById('dashInputWaTemplate');
@@ -2145,7 +2549,7 @@
             vendor.name = document.getElementById('dashInputName').value.trim();
             vendor.block = document.getElementById('dashInputBlock').value;
             vendor.category = document.getElementById('dashInputCategory').value;
-            vendor.phone = document.getElementById('dashInputPhone').value.replace(/\D/g, '');
+            vendor.phone = sanitizePhoneToWaDigits(document.getElementById('dashInputPhone').value);
             vendor.whatsapp_template = document.getElementById('dashInputWaTemplate').value.trim() || DEFAULT_WA_TEMPLATE;
 
             const selectedDays = Array.from(document.querySelectorAll('.dash-day-cb:checked')).map(cb => cb.value);
@@ -2202,15 +2606,52 @@
         }
 
         // ============================================================================
-        // ADMIN USER & BANNER MANAGEMENT PANEL
+        // ADMIN USER, CONTACTS & BANNER MANAGEMENT PANEL
         // ============================================================================
         function renderAdminPanel() {
             const tbody = document.getElementById('adminUsersTableBody');
             const badge = document.getElementById('adminTotalUsersBadge');
             const bannersList = document.getElementById('adminBannersList');
+            const contactsGrid = document.getElementById('adminContactsGrid');
 
             badge.innerText = `${listings.length} Account${listings.length === 1 ? '' : 's'}`;
 
+            // Render Admin Contacts CRUD Cards
+            if (contactsGrid) {
+                if (!Array.isArray(adminContacts) || adminContacts.length === 0) {
+                    contactsGrid.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No official contacts added yet. Click "+ Add Contact" above.</p>`;
+                } else {
+                    contactsGrid.innerHTML = adminContacts.map(c => {
+                        const cleanWa = sanitizePhoneToWaDigits(c.phone);
+                        const dispPhone = displayFormattedPhone(c.phone);
+                        return `
+                            <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between gap-3">
+                                <div class="space-y-1">
+                                    <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
+                                    <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
+                                    <p class="text-xs font-semibold text-slate-700">${dispPhone}</p>
+                                    ${c.email ? `<p class="text-xs text-slate-500 truncate">${c.email}</p>` : ''}
+                                </div>
+                                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/80">
+                                    <a href="https://wa.me/${cleanWa}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
+                                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Test WA
+                                    </a>
+                                    <div class="flex items-center gap-1.5">
+                                        <button type="button" onclick="openAdminContactForm('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-bold transition-colors">
+                                            Edit
+                                        </button>
+                                        <button type="button" onclick="deleteAdminContact('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold transition-colors">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Render Global Hero Banners
             const allBanners = getActiveBanners();
             if (allBanners.length === 0) {
                 bannersList.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No active hero banners. Upload an Admin banner or have a user upload a poster.</p>`;
@@ -2231,8 +2672,10 @@
                 `).join('');
             }
 
+            // Render Registered Vendors Table
             if (listings.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">No user accounts registered yet.</td></tr>`;
+                lucide.createIcons();
                 return;
             }
 
@@ -2254,7 +2697,7 @@
                         <span class="text-emerald-600 font-semibold">${user.block}</span>
                     </td>
                     <td class="py-3.5 px-4 text-xs">
-                        <span class="font-bold text-slate-800 block">+${user.phone}</span>
+                        <span class="font-bold text-slate-800 block">${displayFormattedPhone(user.phone)}</span>
                         <span class="text-slate-400">PIN: ${user.pin}</span>
                     </td>
                     <td class="py-3.5 px-4 text-xs">
@@ -2276,6 +2719,7 @@
                     </td>
                 </tr>
             `}).join('');
+            lucide.createIcons();
         }
 
         async function handleAdminBannerUpload(event) {
@@ -2289,6 +2733,11 @@
                 image: compressed
             });
             saveState();
+            try {
+                await commitVendorsToGitHub(`Add admin hero banner: ${title}`);
+            } catch (err) {
+                console.warn("Admin banner saved locally:", err.message);
+            }
             renderAll();
         }
 
@@ -2302,6 +2751,11 @@
             } else {
                 adminBanners = adminBanners.filter(b => b.id !== bannerId);
                 saveState();
+                try {
+                    await commitVendorsToGitHub(`Remove admin hero banner`);
+                } catch (err) {
+                    console.warn("Banner removed locally:", err.message);
+                }
             }
             renderAll();
         }
@@ -2309,7 +2763,7 @@
         async function adminForceDeleteUser(id) {
             const target = listings.find(v => v.id === id);
             if (!target) return;
-            if (!confirm(`ADMIN ACTION: Force-delete account "${target.name}" (+${target.phone})?`)) return;
+            if (!confirm(`ADMIN ACTION: Force-delete account "${target.name}" (${displayFormattedPhone(target.phone)})?`)) return;
             await deleteVendorById(id);
             renderAll();
         }
@@ -2328,7 +2782,7 @@
                 category: selectedBusiness.category,
                 block: selectedBusiness.block,
                 logo: selectedBusiness.logo || DEFAULT_LOGO,
-                phone: selectedBusiness.phone,
+                phone: sanitizePhoneToWaDigits(selectedBusiness.phone),
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             });
             saveState();
@@ -2352,7 +2806,9 @@
             }
 
             dot.classList.remove('hidden');
-            container.innerHTML = recentHistory.map(item => `
+            container.innerHTML = recentHistory.map(item => {
+                const cleanWa = sanitizePhoneToWaDigits(item.phone);
+                return `
                 <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-2">
                     <div class="flex items-center gap-3 min-w-0">
                         <img src="${item.logo}" class="w-10 h-10 rounded-lg object-cover bg-white flex-shrink-0">
@@ -2361,11 +2817,11 @@
                             <span class="text-[11px] text-slate-500 block truncate">${item.productName || item.category} • ${item.block || ''} • ${item.time || 'Recent'}</span>
                         </div>
                     </div>
-                    <a href="https://wa.me/${item.phone}" target="_blank" rel="noopener noreferrer" class="touch-target flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-xl hover:bg-emerald-200 flex-shrink-0">
+                    <a href="https://wa.me/${cleanWa}" target="_blank" rel="noopener noreferrer" class="touch-target flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-xl hover:bg-emerald-200 flex-shrink-0">
                         <i data-lucide="message-circle" class="w-4 h-4"></i>
                     </a>
                 </div>
-            `).join('');
+            `}).join('');
             lucide.createIcons();
         }
 
