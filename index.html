@@ -267,15 +267,15 @@
                     <h2 id="currentCategoryTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5">All Campus Listings</h2>
                 </div>
 
-                <!-- Quick Filter Pill Buttons (44px min-height for mobile tap) -->
+                <!-- Quick Filter Pill Buttons (with flex-shrink-0 so words never truncate) -->
                 <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 md:pb-0 -mx-1 px-1">
-                    <button onclick="filterCategory('All')" data-cat="All" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all">All</button>
-                    <button onclick="filterCategory('Food & Bites')" data-cat="Food & Bites" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Food & Bites</button>
-                    <button onclick="filterCategory('Runners')" data-cat="Runners" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Runners</button>
-                    <button onclick="filterCategory('Transports')" data-cat="Transports" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Transports</button>
-                    <button onclick="filterCategory('Products')" data-cat="Products" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Products</button>
-                    <button onclick="filterCategory('Services')" data-cat="Services" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Services</button>
-                    <button onclick="filterCategory('Pre-Loved')" data-cat="Pre-Loved" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Pre-Loved</button>
+                    <button onclick="filterCategory('All')" data-cat="All" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-900 text-white transition-all">All</button>
+                    <button onclick="filterCategory('Food & Bites')" data-cat="Food & Bites" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Food & Bites</button>
+                    <button onclick="filterCategory('Runners')" data-cat="Runners" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Runners</button>
+                    <button onclick="filterCategory('Transports')" data-cat="Transports" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Transports</button>
+                    <button onclick="filterCategory('Products')" data-cat="Products" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Products</button>
+                    <button onclick="filterCategory('Services')" data-cat="Services" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Services</button>
+                    <button onclick="filterCategory('Pre-Loved')" data-cat="Pre-Loved" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Pre-Loved</button>
                 </div>
             </div>
 
@@ -1781,14 +1781,14 @@
         }
 
         function filterCategory(cat) {
-            activeCategory = cat;
-            showPage('listings');
-
-            document.querySelectorAll('.cat-pill-btn').forEach(btn => {
-                if (btn.getAttribute('data-cat') === cat) {
-                    btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all';
-                } else {
-                    btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all';
+                    activeCategory = cat;
+                    showPage('listings');
+        
+                    document.querySelectorAll('.cat-pill-btn').forEach(btn => {
+                        if (btn.getAttribute('data-cat') === cat) {
+                            btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-900 text-white transition-all';
+                        } else {
+                            btn.className = 'cat
                 }
             });
 
