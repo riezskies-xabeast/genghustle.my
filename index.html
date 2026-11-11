@@ -103,7 +103,7 @@
 
                     <!-- Public Admin & Emergency Contacts Trigger -->
                     <button onclick="openModal('contactsModal')" class="touch-target flex items-center justify-center gap-1.5 px-2.5 rounded-xl hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 transition-colors relative" title="Admin & Emergency Contacts" aria-label="Admin & Emergency Contacts">
-                        <i data-lucide="Headset" class="w-5 h-5 text-emerald-600"></i>
+                        <i data-lucide="headset" class="w-5 h-5 text-emerald-600"></i>
                         <span class="hidden lg:inline text-xs font-bold">Support</span>
                     </button>
 
@@ -150,7 +150,6 @@
             
             <!-- 1. MOBILE-FIXED DYNAMIC FULL-WIDTH HERO CAROUSEL WITH TOUCH SWIPE -->
             <div id="heroCarouselContainer" class="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl bg-slate-900 text-white shadow-xl min-h-[220px] sm:min-h-[320px] block">
-                <!-- Slides Track (Explicit min-height so mobile slides never collapse or clip) -->
                 <div id="heroCarouselTrack" class="relative w-full min-h-[220px] sm:min-h-[320px] block"></div>
 
                 <!-- High Z-Index Prev / Next Controls (44x44px touch targets) -->
@@ -267,15 +266,15 @@
                     <h2 id="currentCategoryTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight mt-0.5">All Campus Listings</h2>
                 </div>
 
-                <!-- Quick Filter Pill Buttons (with flex-shrink-0 so words never truncate) -->
+                <!-- Quick Filter Pill Buttons (44px min-height for mobile tap) -->
                 <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-1 md:pb-0 -mx-1 px-1">
-                    <button onclick="filterCategory('All')" data-cat="All" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-900 text-white transition-all">All</button>
-                    <button onclick="filterCategory('Food & Bites')" data-cat="Food & Bites" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Food & Bites</button>
-                    <button onclick="filterCategory('Runners')" data-cat="Runners" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Runners</button>
-                    <button onclick="filterCategory('Transports')" data-cat="Transports" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Transports</button>
-                    <button onclick="filterCategory('Products')" data-cat="Products" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Products</button>
-                    <button onclick="filterCategory('Services')" data-cat="Services" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Services</button>
-                    <button onclick="filterCategory('Pre-Loved')" data-cat="Pre-Loved" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Pre-Loved</button>
+                    <button onclick="filterCategory('All')" data-cat="All" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all">All</button>
+                    <button onclick="filterCategory('Food & Bites')" data-cat="Food & Bites" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Food & Bites</button>
+                    <button onclick="filterCategory('Runners')" data-cat="Runners" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Runners</button>
+                    <button onclick="filterCategory('Transports')" data-cat="Transports" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Transports</button>
+                    <button onclick="filterCategory('Products')" data-cat="Products" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Products</button>
+                    <button onclick="filterCategory('Services')" data-cat="Services" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Services</button>
+                    <button onclick="filterCategory('Pre-Loved')" data-cat="Pre-Loved" class="cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all">Pre-Loved</button>
                 </div>
             </div>
 
@@ -748,7 +747,7 @@
         </div>
     </footer>
 
-    <!-- ==================== MODALS (MOBILE SHEET & STICKY FOOTER OPTIMIZED) ==================== -->
+    <!-- ==================== MODALS ==================== -->
 
     <!-- PUBLIC ADMIN & EMERGENCY CONTACTS DIRECTORY MODAL -->
     <div id="contactsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center sm:p-4">
@@ -822,7 +821,7 @@
                         <div id="modalProductsList" class="space-y-2.5"></div>
                     </div>
 
-                    <!-- Customer Notes Input (Feeds {customer_notes} in WhatsApp template) -->
+                    <!-- Customer Notes Input -->
                     <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 space-y-1.5">
                         <label for="modalCustomerNotes" class="block text-xs font-bold text-slate-700">Order Notes / Delivery Instructions (Optional)</label>
                         <input type="text" id="modalCustomerNotes" oninput="updateModalWhatsappLink()" placeholder="e.g. Less spicy, Room 312 Block 4, COD at 8PM..." class="w-full px-3.5 min-h-[44px] bg-white border border-slate-200 rounded-xl text-sm focus:border-emerald-500 focus:outline-none">
@@ -830,7 +829,7 @@
                 </div>
             </div>
 
-            <!-- Grounded Sticky Action Bar (Never overlaps scrollable content) -->
+            <!-- Grounded Sticky Action Bar -->
             <div class="p-3.5 sm:p-4 bg-white border-t border-slate-200 flex items-center justify-between gap-3 safe-bottom flex-shrink-0">
                 <div class="min-w-0">
                     <p class="text-[11px] text-slate-400 truncate" id="modalSelectedSummary">Selected Item</p>
@@ -875,14 +874,13 @@
                     </button>
                 </div>
 
-                <!-- STREAMLINED REGISTER FORM (Basic Profile Info Only) -->
+                <!-- STREAMLINED REGISTER FORM -->
                 <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Business Name *</label>
                         <input type="text" id="regName" required placeholder="e.g. Block 4 Express Runner" class="w-full px-3.5 min-h-[44px] bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:outline-none">
                     </div>
 
-                    <!-- Category & Block 1-11 Selector -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Business Category *</label>
@@ -913,7 +911,6 @@
                         </div>
                     </div>
 
-                    <!-- WhatsApp Phone (+60 Auto-Formatted) & 4-Digit PIN -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">WhatsApp Phone (+60) *</label>
@@ -925,7 +922,6 @@
                         </div>
                     </div>
 
-                    <!-- Operating Days & Hours -->
                     <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Operating Days & Hours *</label>
                         <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
@@ -949,7 +945,6 @@
                         </div>
                     </div>
 
-                    <!-- Business Logo Upload -->
                     <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Business Logo Upload (Optional)</label>
                         <div class="flex items-center gap-3">
@@ -1004,9 +999,6 @@
 
     <!-- ==================== JAVASCRIPT FULL-STACK PROXY + MULTI-PRODUCT LOGIC ==================== -->
     <script>
-        // ============================================================================
-        // LIVE PUBLIC PROXY DATABASE CONFIGURATION (Connected to Cloudflare Worker)
-        // ============================================================================
         const API_URL = "https://genghustle-api.riezskies.workers.dev";
         let githubFileSHA = null;
 
@@ -1014,7 +1006,6 @@
         const DEFAULT_WA_TEMPLATE = "Hi {business_name}, I would like to order {product_name} ({price} {pricing_unit}). Notes: {customer_notes}";
         const SYSTEM_META_ID = "__gh_system_meta__";
 
-        // Seeded Admin Account (Supports 012345678 or auto-prefixed +6012345678)
         const ADMIN_ACCOUNT = {
             phone: "012345678",
             sanitizedPhone: "6012345678",
@@ -1022,7 +1013,6 @@
             role: "admin"
         };
 
-        // Default Seeded Admin & Emergency Contacts
         const DEFAULT_ADMIN_CONTACTS = [
             {
                 id: "contact-default-1",
@@ -1040,11 +1030,9 @@
             }
         ];
 
-        // Purge legacy demo storage keys
         localStorage.removeItem('gh_listings_v1');
         localStorage.removeItem('gh_fallback_listings');
 
-        // Application State
         let listings = JSON.parse(localStorage.getItem('gh_listings_v2')) || [];
         let adminBanners = JSON.parse(localStorage.getItem('gh_admin_banners_v2')) || [];
         let adminContacts = JSON.parse(localStorage.getItem('gh_admin_contacts_v2')) || DEFAULT_ADMIN_CONTACTS;
@@ -1061,26 +1049,17 @@
         let heroInterval = null;
         let editingVendorId = null;
 
-        // Touch Swipe State for Hero Carousel
         let heroTouchStartX = 0;
         let heroTouchStartY = 0;
         let heroTouchEndX = 0;
         let heroTouchEndY = 0;
 
-        // ============================================================================
-        // 3. AUTOMATIC MALAYSIAN COUNTRY CODE (+60) PHONE FORMATTING & SANITIZATION
-        // ============================================================================
         function sanitizePhoneToWaDigits(rawInput) {
             if (!rawInput) return "";
             let digits = String(rawInput).replace(/\D/g, '');
             if (!digits) return "";
-
-            // Strip leading zeros (e.g. 0123456789 -> 123456789)
             digits = digits.replace(/^0+/, '');
-
-            // Prepend Malaysia country code 60 if not already present
             if (digits.startsWith('60')) {
-                // Handle accidental 60012... -> 6012...
                 digits = '60' + digits.slice(2).replace(/^0+/, '');
             } else {
                 digits = '60' + digits;
@@ -1090,43 +1069,30 @@
 
         function displayFormattedPhone(rawInput) {
             const waDigits = sanitizePhoneToWaDigits(rawInput);
-            return waDigits ? `+${waDigits}` : "+60";
+            return waDigits ? ("+" + waDigits) : "+60";
         }
 
         function formatMalaysianPhoneInput(inputEl, isBlur = false) {
             if (!inputEl) return;
             let raw = inputEl.value;
-
-            // Restrict characters strictly to numeric digits and leading +
             let digits = raw.replace(/\D/g, '');
-
             if (!digits) {
                 inputEl.value = isBlur ? "" : "+60";
                 return;
             }
-
-            // Strip any leading zeros (e.g., 0123456789 -> 123456789)
             if (digits.startsWith('0')) {
                 digits = digits.replace(/^0+/, '');
             } else if (digits.startsWith('60')) {
                 digits = digits.slice(2).replace(/^0+/, '');
             }
-
             inputEl.value = '+60' + digits;
         }
 
-        // ============================================================================
-        // SCHEMA MIGRATION: NORMALIZE VENDORS & SYSTEM META CARRIER
-        // ============================================================================
         function normalizeVendorSchema(vendor) {
             if (!vendor || vendor.id === SYSTEM_META_ID) return vendor;
-
-            // Format vendor phone to clean WA digits (601...)
             if (vendor.phone) {
                 vendor.phone = sanitizePhoneToWaDigits(vendor.phone);
             }
-
-            // Migrate legacy single-product `details` into `products` array if needed
             if (!Array.isArray(vendor.products)) {
                 vendor.products = [];
                 if (vendor.details && vendor.details.primaryItem) {
@@ -1135,7 +1101,7 @@
                     let unit = d.unit || 'per item';
                     if (unit === 'Others' && d.customUnit) unit = d.customUnit;
                     if (unit && !unit.startsWith('per ') && unit !== 'Skip') {
-                        unit = `per ${unit}`;
+                        unit = "per " + unit;
                     }
                     const fallbackImg = (vendor.product_images && vendor.product_images[0]) || vendor.logo || DEFAULT_LOGO;
                     vendor.products.push({
@@ -1150,11 +1116,9 @@
                     });
                 }
             }
-
             if (!vendor.whatsapp_template || typeof vendor.whatsapp_template !== 'string') {
                 vendor.whatsapp_template = DEFAULT_WA_TEMPLATE;
             }
-
             const firstProd = vendor.products[0];
             if (firstProd) {
                 vendor.details = {
@@ -1175,7 +1139,6 @@
                     extraInfo: vendor.block || ""
                 };
             }
-
             return vendor;
         }
 
@@ -1188,19 +1151,19 @@
             localStorage.setItem('gh_session_v2', JSON.stringify(session));
         }
 
-        // INITIALIZE APP ON LOAD
         document.addEventListener('DOMContentLoaded', async () => {
-            listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
-            initHeroTouchSwipe();
-            renderAll();
-            startHeroAutoplay();
-            await loadVendors();
+            try {
+                listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
+                initHeroTouchSwipe();
+                renderAll();
+                startHeroAutoplay();
+                await loadVendors();
+            } catch (err) {
+                console.error("Initialization error:", err);
+            }
             lucide.createIcons();
         });
 
-        // ============================================================================
-        // CLOUDFLARE WORKER -> GITHUB REST API READ & WRITE ENGINE (WITH CONTACTS SYNC)
-        // ============================================================================
         async function loadVendors() {
             const badge = document.getElementById('dbStatusBadge');
             const refreshIcon = document.getElementById('refreshIcon');
@@ -1210,9 +1173,9 @@
                 badge.innerText = "Syncing...";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700";
 
-                const response = await fetch(API_URL);
+                const response = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
+                    throw new Error("HTTP " + response.status);
                 }
 
                 const data = await response.json();
@@ -1222,7 +1185,6 @@
                 const parsed = JSON.parse(rawContent);
 
                 if (Array.isArray(parsed)) {
-                    // Extract optional system metadata record (Admin Contacts & Admin Banners)
                     const metaRecord = parsed.find(item => item && item.id === SYSTEM_META_ID);
                     if (metaRecord) {
                         if (Array.isArray(metaRecord.adminContacts) && metaRecord.adminContacts.length > 0) {
@@ -1256,40 +1218,40 @@
             const badge = document.getElementById('dbStatusBadge');
             badge.innerText = "Saving...";
             badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800";
-        
+
             listings = listings.filter(v => v && v.id !== SYSTEM_META_ID).map(normalizeVendorSchema);
-        
+
             const repoDataPayload = [
                 ...listings,
                 {
                     id: SYSTEM_META_ID,
-                    adminContacts,
-                    adminBanners,
+                    adminContacts: adminContacts,
+                    adminBanners: adminBanners,
                     updatedAt: new Date().toISOString()
                 }
             ];
-        
+
             const jsonString = JSON.stringify(repoDataPayload, null, 2);
             const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-        
+
             const payload = {
                 message: commitMessage,
                 content: base64Content
             };
-        
+
             const res = await fetch(API_URL, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
-        
+
             if (!res.ok) {
                 const errData = await res.json().catch(() => ({}));
                 badge.innerText = "Commit Error";
                 badge.className = "text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700";
-                throw new Error(errData.message || `HTTP ${res.status}`);
+                throw new Error(errData.message || ("HTTP " + res.status));
             }
-        
+
             const resData = await res.json();
             githubFileSHA = resData.content?.sha || githubFileSHA;
             badge.innerText = "Live Cloud Sync";
@@ -1309,9 +1271,6 @@
             lucide.createIcons();
         }
 
-        // ============================================================================
-        // 1. MOBILE-FIXED DYNAMIC HERO CAROUSEL & TOUCH SWIPE GESTURES
-        // ============================================================================
         function getActiveBanners() {
             const slides = [];
             adminBanners.forEach(b => {
@@ -1330,9 +1289,9 @@
                 if (v && v.id !== SYSTEM_META_ID && v.poster && v.poster.trim() !== "") {
                     const summaryPrice = (v.products && v.products[0]) ? v.products[0].formattedPrice : (v.details?.formattedPrice || 'View Store');
                     slides.push({
-                        id: `vendor-${v.id}`,
+                        id: "vendor-" + v.id,
                         title: v.name,
-                        subtitle: `${v.category} • ${v.block} • ${summaryPrice}`,
+                        subtitle: v.category + " • " + v.block + " • " + summaryPrice,
                         badge: v.status || "Featured Store",
                         image: v.poster,
                         vendorId: v.id
@@ -1350,27 +1309,15 @@
             const slides = getActiveBanners();
 
             if (slides.length === 0) {
-                track.innerHTML = `
-                    <div class="w-full min-h-[220px] sm:min-h-[320px] px-12 py-6 sm:p-12 relative z-10 flex flex-col items-start justify-center bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900">
-                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-2.5">
-                            IIUM Pagoh Directory
-                        </span>
-                        <h1 class="text-lg sm:text-4xl font-extrabold tracking-tight text-white max-w-2xl leading-snug">
-                            Support All Studentpreneurs in IIUM Pagoh
-                        </h1>
-                        <p class="text-slate-300 text-xs sm:text-sm mt-1.5 max-w-xl line-clamp-2 sm:line-clamp-none">
-                            Direct WhatsApp ordering with zero middleman fees. Swipe announcements or register your campus store in 30 seconds!
-                        </p>
-                        <div class="mt-4 flex flex-wrap gap-2 w-full sm:w-auto">
-                            <button onclick="filterCategory('All')" class="touch-target px-4 sm:px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm rounded-xl transition-all">
-                                Browse Directory
-                            </button>
-                            <button onclick="openAuthModal('register')" class="touch-target px-4 sm:px-5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm rounded-xl border border-white/10 transition-all">
-                                Register Business
-                            </button>
-                        </div>
+                track.innerHTML = `<div class="w-full min-h-[220px] sm:min-h-[320px] px-12 py-6 sm:p-12 relative z-10 flex flex-col items-start justify-center bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-2.5">IIUM Pagoh Directory</span>
+                    <h1 class="text-lg sm:text-4xl font-extrabold tracking-tight text-white max-w-2xl leading-snug">Support All Studentpreneurs in IIUM Pagoh</h1>
+                    <p class="text-slate-300 text-xs sm:text-sm mt-1.5 max-w-xl line-clamp-2 sm:line-clamp-none">Direct WhatsApp ordering with zero middleman fees. Swipe announcements or register your campus store in 30 seconds!</p>
+                    <div class="mt-4 flex flex-wrap gap-2 w-full sm:w-auto">
+                        <button onclick="filterCategory('All')" class="touch-target px-4 sm:px-5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm rounded-xl transition-all">Browse Directory</button>
+                        <button onclick="openAuthModal('register')" class="touch-target px-4 sm:px-5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm rounded-xl border border-white/10 transition-all">Register Business</button>
                     </div>
-                `;
+                </div>`;
                 dots.classList.add('hidden');
                 dots.innerHTML = '';
                 return;
@@ -1379,32 +1326,26 @@
             if (currentHeroSlide >= slides.length) currentHeroSlide = 0;
             if (currentHeroSlide < 0) currentHeroSlide = slides.length - 1;
             const active = slides[currentHeroSlide];
+            const actionBtnHtml = active.vendorId
+                ? `<div class="pt-1.5"><button onclick="openDetailModal(${active.vendorId})" class="touch-target px-4 bg-white text-slate-900 hover:bg-emerald-400 font-bold text-xs rounded-xl transition-all shadow">View Store & Menu</button></div>`
+                : '';
 
-            track.innerHTML = `
-                <div class="relative w-full min-h-[220px] sm:min-h-[320px] flex flex-col justify-end px-12 pb-11 pt-6 sm:p-10 sm:pb-12 overflow-hidden">
-                    <img src="${active.image}" alt="${active.title}" class="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950/20 z-10 pointer-events-none"></div>
-                    <div class="relative z-20 max-w-2xl space-y-1.5">
-                        <span class="px-2.5 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider inline-block shadow">
-                            ${active.badge}
-                        </span>
-                        <h2 class="text-lg sm:text-4xl font-extrabold text-white leading-tight line-clamp-2">${active.title}</h2>
-                        <p class="text-xs sm:text-sm text-slate-200 line-clamp-1">${active.subtitle}</p>
-                        ${active.vendorId ? `
-                            <div class="pt-1.5">
-                                <button onclick="openDetailModal(${active.vendorId})" class="touch-target px-4 bg-white text-slate-900 hover:bg-emerald-400 font-bold text-xs rounded-xl transition-all shadow">
-                                    View Store & Menu
-                                </button>
-                            </div>
-                        ` : ''}
-                    </div>
+            track.innerHTML = `<div class="relative w-full min-h-[220px] sm:min-h-[320px] flex flex-col justify-end px-12 pb-11 pt-6 sm:p-10 sm:pb-12 overflow-hidden">
+                <img src="${active.image}" alt="${active.title}" class="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-slate-950/20 z-10 pointer-events-none"></div>
+                <div class="relative z-20 max-w-2xl space-y-1.5">
+                    <span class="px-2.5 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-extrabold uppercase tracking-wider inline-block shadow">${active.badge}</span>
+                    <h2 class="text-lg sm:text-4xl font-extrabold text-white leading-tight line-clamp-2">${active.title}</h2>
+                    <p class="text-xs sm:text-sm text-slate-200 line-clamp-1">${active.subtitle}</p>
+                    ${actionBtnHtml}
                 </div>
-            `;
+            </div>`;
 
             dots.classList.remove('hidden');
-            dots.innerHTML = slides.map((_, idx) => `
-                <button type="button" onclick="goToHeroSlide(${idx})" aria-label="Go to slide ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === currentHeroSlide ? 'w-7 bg-emerald-400' : 'w-2.5 bg-white/60 hover:bg-white'}"></button>
-            `).join('');
+            dots.innerHTML = slides.map((_, idx) => {
+                const dotClass = idx === currentHeroSlide ? 'w-7 bg-emerald-400' : 'w-2.5 bg-white/60 hover:bg-white';
+                return `<button type="button" onclick="goToHeroSlide(${idx})" aria-label="Go to slide ${idx + 1}" class="h-2.5 rounded-full transition-all ${dotClass}"></button>`;
+            }).join('');
         }
 
         function initHeroTouchSwipe() {
@@ -1430,14 +1371,13 @@
             const deltaY = heroTouchEndY - heroTouchStartY;
             const swipeThreshold = 40;
 
-            // Trigger slide change if horizontal swipe exceeds threshold and dominates vertical scroll
             if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
                 if (deltaX < 0) {
                     nextHeroSlide();
                 } else {
                     prevHeroSlide();
                 }
-                startHeroAutoplay(); // Reset autoplay timer after manual swipe
+                startHeroAutoplay();
             }
         }
 
@@ -1471,9 +1411,6 @@
             }, 5000);
         }
 
-        // ============================================================================
-        // 2. ADMIN & EMERGENCY CONTACTS DIRECTORY CRUD LOGIC
-        // ============================================================================
         function openAdminContactForm(contactId = null) {
             const form = document.getElementById('adminContactForm');
             const titleEl = document.getElementById('adminContactFormTitle');
@@ -1542,7 +1479,7 @@
 
             saveState();
             try {
-                await commitVendorsToGitHub(`Update admin contact: ${name}`);
+                await commitVendorsToGitHub("Update admin contact: " + name);
             } catch (err) {
                 console.warn("Contact saved locally, cloud sync notice:", err.message);
             } finally {
@@ -1556,12 +1493,12 @@
         async function deleteAdminContact(contactId) {
             const target = adminContacts.find(c => c.id === contactId);
             if (!target) return;
-            if (!confirm(`Remove "${target.name}" from the Admin & Emergency Contacts directory?`)) return;
+            if (!confirm("Remove \"" + target.name + "\" from the Admin & Emergency Contacts directory?")) return;
 
             adminContacts = adminContacts.filter(c => c.id !== contactId);
             saveState();
             try {
-                await commitVendorsToGitHub(`Delete admin contact: ${target.name}`);
+                await commitVendorsToGitHub("Delete admin contact: " + target.name);
             } catch (err) {
                 console.warn("Contact deleted locally:", err.message);
             }
@@ -1580,35 +1517,31 @@
             container.innerHTML = adminContacts.map(c => {
                 const cleanWaDigits = sanitizePhoneToWaDigits(c.phone);
                 const displayPhone = displayFormattedPhone(c.phone);
-                return `
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="space-y-1 min-w-0">
-                            <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
-                            <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
-                            <div class="text-xs text-slate-600 space-y-0.5">
-                                <p class="font-semibold">${displayPhone}</p>
-                                ${c.email ? `<p class="text-slate-500 truncate">${c.email}</p>` : ''}
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 flex-shrink-0">
-                            ${c.email ? `
-                                <a href="mailto:${c.email}" class="touch-target px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-xs flex items-center gap-1.5">
-                                    <i data-lucide="mail" class="w-4 h-4"></i> Email
-                                </a>
-                            ` : ''}
-                            <a href="https://wa.me/${cleanWaDigits}" target="_blank" rel="noopener noreferrer" class="touch-target px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
-                                <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
-                            </a>
+                const emailHtml = c.email ? `<p class="text-slate-500 truncate">${c.email}</p>` : '';
+                const emailBtnHtml = c.email
+                    ? `<a href="mailto:${c.email}" class="touch-target px-3 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-xs flex items-center gap-1.5"><i data-lucide="mail" class="w-4 h-4"></i> Email</a>`
+                    : '';
+
+                return `<div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-1 min-w-0">
+                        <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
+                        <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
+                        <div class="text-xs text-slate-600 space-y-0.5">
+                            <p class="font-semibold">${displayPhone}</p>
+                            ${emailHtml}
                         </div>
                     </div>
-                `;
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                        ${emailBtnHtml}
+                        <a href="https://wa.me/${cleanWaDigits}" target="_blank" rel="noopener noreferrer" class="touch-target px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>`;
             }).join('');
             lucide.createIcons();
         }
 
-        // ============================================================================
-        // PRICE, UNIT & OPERATING SCHEDULE HELPERS
-        // ============================================================================
         function formatDecimalInput(inputEl) {
             const val = parseFloat(inputEl.value);
             if (!isNaN(val)) {
@@ -1634,22 +1567,19 @@
                 finalUnit = customUnitText ? customUnitText.trim() : 'per item';
             }
             if (!finalUnit || finalUnit === 'Skip') {
-                return `RM ${priceFixed}`;
+                return "RM " + priceFixed;
             }
             const cleanUnit = finalUnit.replace(/^\/\s*/, '');
-            return `RM ${priceFixed} (${cleanUnit})`;
+            return "RM " + priceFixed + " (" + cleanUnit + ")";
         }
 
         function buildScheduleString(daysArray, openTime, closeTime) {
             const daysText = (daysArray && daysArray.length > 0) ? daysArray.join(', ') : 'Daily';
             const open = openTime || '08:00';
             const close = closeTime || '22:00';
-            return `${daysText} • ${open} - ${close}`;
+            return daysText + " • " + open + " - " + close;
         }
 
-        // ============================================================================
-        // IMAGE COMPRESSION HELPER
-        // ============================================================================
         function compressImageFile(file, maxWidth = 700) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1697,15 +1627,12 @@
             renderAll();
         }
 
-        // ============================================================================
-        // NAVIGATION & FILTERING
-        // ============================================================================
         function showPage(pageId) {
             ['home', 'listings', 'dashboard', 'admin'].forEach(p => {
-                const el = document.getElementById(`page-${p}`);
+                const el = document.getElementById('page-' + p);
                 if (el) el.classList.add('hidden');
             });
-            const target = document.getElementById(`page-${pageId}`);
+            const target = document.getElementById('page-' + pageId);
             if (target) target.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             lucide.createIcons();
@@ -1717,29 +1644,13 @@
 
             if (session && session.role === 'admin') {
                 if (adminSwitchBtn) adminSwitchBtn.classList.remove('hidden');
-                navArea.innerHTML = `
-                    <button onclick="showPage('admin'); renderAdminPanel();" class="touch-target inline-flex items-center gap-1.5 px-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm transition-all">
-                        <i data-lucide="shield" class="w-4 h-4"></i>
-                        <span>Admin</span>
-                    </button>
-                `;
+                navArea.innerHTML = `<button onclick="showPage('admin'); renderAdminPanel();" class="touch-target inline-flex items-center gap-1.5 px-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs rounded-xl shadow-sm transition-all"><i data-lucide="shield" class="w-4 h-4"></i><span>Admin</span></button>`;
             } else if (session && session.role === 'vendor') {
                 if (adminSwitchBtn) adminSwitchBtn.classList.add('hidden');
-                navArea.innerHTML = `
-                    <button onclick="openDashboard(${session.vendorId})" class="touch-target inline-flex items-center gap-2 px-3.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl transition-all">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-600"></i>
-                        <span>My Store</span>
-                    </button>
-                `;
+                navArea.innerHTML = `<button onclick="openDashboard(${session.vendorId})" class="touch-target inline-flex items-center gap-2 px-3.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl transition-all"><i data-lucide="layout-dashboard" class="w-4 h-4 text-emerald-600"></i><span>My Store</span></button>`;
             } else {
                 if (adminSwitchBtn) adminSwitchBtn.classList.add('hidden');
-                navArea.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="touch-target inline-flex items-center gap-2 px-3.5 sm:px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-all">
-                        <i data-lucide="user" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">Login / Register</span>
-                        <span class="sm:hidden">Login</span>
-                    </button>
-                `;
+                navArea.innerHTML = `<button onclick="openAuthModal('login')" class="touch-target inline-flex items-center gap-2 px-3.5 sm:px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition-all"><i data-lucide="user" class="w-4 h-4"></i><span class="hidden sm:inline">Login / Register</span><span class="sm:hidden">Login</span></button>`;
             }
             lucide.createIcons();
         }
@@ -1747,14 +1658,12 @@
         function renderHomeGrid() {
             const grid = document.getElementById('homeBusinessGrid');
             if (listings.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
-                        <i data-lucide="store" class="w-10 h-10 text-emerald-600 mx-auto"></i>
-                        <h3 class="text-base font-bold text-slate-800">No Studentpreneur Listings Yet</h3>
-                        <p class="text-xs text-slate-500 max-w-md mx-auto">Be the first to register your campus business!</p>
-                        <button onclick="openAuthModal('register')" class="touch-target px-5 bg-emerald-600 text-white text-xs font-bold rounded-xl">Register First Business</button>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
+                    <i data-lucide="store" class="w-10 h-10 text-emerald-600 mx-auto"></i>
+                    <h3 class="text-base font-bold text-slate-800">No Studentpreneur Listings Yet</h3>
+                    <p class="text-xs text-slate-500 max-w-md mx-auto">Be the first to register your campus business!</p>
+                    <button onclick="openAuthModal('register')" class="touch-target px-5 bg-emerald-600 text-white text-xs font-bold rounded-xl">Register First Business</button>
+                </div>`;
                 lucide.createIcons();
                 return;
             }
@@ -1781,14 +1690,14 @@
         }
 
         function filterCategory(cat) {
-                    activeCategory = cat;
-                    showPage('listings');
-        
-                    document.querySelectorAll('.cat-pill-btn').forEach(btn => {
-                        if (btn.getAttribute('data-cat') === cat) {
-                            btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap flex-shrink-0 bg-slate-900 text-white transition-all';
-                        } else {
-                            btn.className = 'cat
+            activeCategory = cat;
+            showPage('listings');
+
+            document.querySelectorAll('.cat-pill-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-white transition-all';
+                } else {
+                    btn.className = 'cat-pill-btn touch-target px-4 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all';
                 }
             });
 
@@ -1799,16 +1708,16 @@
             const query = (document.getElementById('desktopSearchInput')?.value || document.getElementById('mobileSearchInput')?.value || '').trim().toLowerCase();
             
             let badgeText = activeCategory;
-            if (activeBlock !== 'All') badgeText += ` • ${activeBlock}`;
+            if (activeBlock !== 'All') badgeText += " • " + activeBlock;
             document.getElementById('currentCategoryBadge').innerText = badgeText;
             document.getElementById('currentCategoryTitle').innerText = query
-                ? `Search: "${query}"`
-                : (activeCategory === 'All' ? 'All Campus Listings' : `${activeCategory}`);
+                ? ("Search: \"" + query + "\"")
+                : (activeCategory === 'All' ? 'All Campus Listings' : activeCategory);
 
             const filtered = listings.filter(item => {
                 const matchesCat = activeCategory === 'All' || item.category === activeCategory;
                 const matchesBlock = activeBlock === 'All' || item.block === activeBlock;
-                const productNames = (item.products || []).map(p => `${p.name} ${p.info || ''}`).join(' ').toLowerCase();
+                const productNames = (item.products || []).map(p => (p.name + " " + (p.info || ''))).join(' ').toLowerCase();
                 const detailValues = Object.values(item.details || {}).join(' ').toLowerCase();
                 const matchesQuery = !query || (
                     item.name.toLowerCase().includes(query) ||
@@ -1826,14 +1735,12 @@
         function renderListingsGrid(items) {
             const container = document.getElementById('listingsGrid');
             if (items.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
-                        <i data-lucide="search-x" class="w-10 h-10 text-slate-300 mx-auto"></i>
-                        <p class="text-sm font-bold text-slate-700">No matching listings found</p>
-                        <p class="text-xs text-slate-400">Try resetting your Block or Category filters.</p>
-                        <button onclick="resetAllFilters()" class="touch-target mt-2 px-5 bg-emerald-600 text-white text-xs font-bold rounded-xl">Reset All Filters</button>
-                    </div>
-                `;
+                container.innerHTML = `<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-12 text-center space-y-3">
+                    <i data-lucide="search-x" class="w-10 h-10 text-slate-300 mx-auto"></i>
+                    <p class="text-sm font-bold text-slate-700">No matching listings found</p>
+                    <p class="text-xs text-slate-400">Try resetting your Block or Category filters.</p>
+                    <button onclick="resetAllFilters()" class="touch-target mt-2 px-5 bg-emerald-600 text-white text-xs font-bold rounded-xl">Reset All Filters</button>
+                </div>`;
                 lucide.createIcons();
                 return;
             }
@@ -1860,62 +1767,51 @@
 
             let priceBadge = "New Store";
             if (prods.length === 1) {
-                priceBadge = `RM ${parseFloat(firstProd.price || 0).toFixed(2)}`;
+                priceBadge = "RM " + parseFloat(firstProd.price || 0).toFixed(2);
             } else if (prods.length > 1) {
                 const prices = prods.map(p => parseFloat(p.price || 0)).filter(n => !isNaN(n));
                 const minPrice = prices.length ? Math.min(...prices).toFixed(2) : "0.00";
-                priceBadge = `From RM ${minPrice}`;
+                priceBadge = "From RM " + minPrice;
             }
 
             const itemCountLabel = prods.length === 0
                 ? "Menu updating"
-                : `${prods.length} ${prods.length === 1 ? 'Product' : 'Products'}`;
+                : (prods.length + " " + (prods.length === 1 ? 'Product' : 'Products'));
 
-            return `
-                <div onclick="openDetailModal(${item.id})" class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-emerald-500/40 transition-all cursor-pointer group flex flex-col justify-between active:scale-[0.99]">
-                    <div>
-                        <div class="relative h-44 overflow-hidden bg-slate-100">
-                            <img src="${coverImg}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            
-                            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
-                                ${item.category}
-                            </span>
+            const statusBadgeClass = isAvailable ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white';
+            const statusDotClass = isAvailable ? 'bg-white animate-pulse' : 'bg-white/60';
 
-                            <span class="absolute top-3 right-3 bg-emerald-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-md shadow">
-                                ${priceBadge}
-                            </span>
-
-                            <span class="absolute bottom-3 right-3 ${isAvailable ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full ${isAvailable ? 'bg-white animate-pulse' : 'bg-white/60'}"></span>
-                                ${item.status}
-                            </span>
-                        </div>
-
-                        <div class="p-4 space-y-2">
-                            <div class="flex items-center gap-3">
-                                <img src="${logoImg}" alt="${item.name}" class="w-11 h-11 rounded-xl object-cover border border-slate-100 shadow-sm flex-shrink-0 bg-slate-50">
-                                <div class="min-w-0 flex-1">
-                                    <h3 class="font-bold text-slate-900 text-base leading-snug truncate group-hover:text-emerald-600 transition-colors">${item.name}</h3>
-                                    <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5 font-semibold">
-                                        <i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
-                                        <span class="truncate">${item.block} • ${itemCountLabel}</span>
-                                    </p>
-                                </div>
+            return `<div onclick="openDetailModal(${item.id})" class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:shadow-xl hover:border-emerald-500/40 transition-all cursor-pointer group flex flex-col justify-between active:scale-[0.99]">
+                <div>
+                    <div class="relative h-44 overflow-hidden bg-slate-100">
+                        <img src="${coverImg}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">${item.category}</span>
+                        <span class="absolute top-3 right-3 bg-emerald-600 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-md shadow">${priceBadge}</span>
+                        <span class="absolute bottom-3 right-3 ${statusBadgeClass} text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full ${statusDotClass}"></span>
+                            ${item.status}
+                        </span>
+                    </div>
+                    <div class="p-4 space-y-2">
+                        <div class="flex items-center gap-3">
+                            <img src="${logoImg}" alt="${item.name}" class="w-11 h-11 rounded-xl object-cover border border-slate-100 shadow-sm flex-shrink-0 bg-slate-50">
+                            <div class="min-w-0 flex-1">
+                                <h3 class="font-bold text-slate-900 text-base leading-snug truncate group-hover:text-emerald-600 transition-colors">${item.name}</h3>
+                                <p class="text-xs text-slate-500 flex items-center gap-1.5 mt-0.5 font-semibold">
+                                    <i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0"></i>
+                                    <span class="truncate">${item.block} • ${itemCountLabel}</span>
+                                </p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                        <span class="truncate pr-2"><i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-slate-400"></i>${item.schedule}</span>
-                        <span class="font-bold text-emerald-600 flex items-center gap-0.5 flex-shrink-0">Order <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
-                    </div>
                 </div>
-            `;
+                <div class="px-4 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span class="truncate pr-2"><i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-slate-400"></i>${item.schedule}</span>
+                    <span class="font-bold text-emerald-600 flex items-center gap-0.5 flex-shrink-0">Order <i data-lucide="chevron-right" class="w-4 h-4"></i></span>
+                </div>
+            </div>`;
         }
 
-        // ============================================================================
-        // PUBLIC DETAIL MODAL & DYNAMIC WHATSAPP MESSAGE PARSER
-        // ============================================================================
         function openDetailModal(id) {
             selectedBusiness = listings.find(b => b.id === id);
             if (!selectedBusiness) return;
@@ -1937,7 +1833,7 @@
             document.getElementById('modalCustomerNotes').value = '';
 
             const isAvail = b.status === "Available";
-            document.getElementById('modalStatusDot').className = `w-2 h-2 rounded-full ${isAvail ? 'bg-emerald-400' : 'bg-rose-400'}`;
+            document.getElementById('modalStatusDot').className = "w-2 h-2 rounded-full " + (isAvail ? 'bg-emerald-400' : 'bg-rose-400');
             document.getElementById('modalStatusText').innerText = b.status;
 
             renderModalProductsList();
@@ -1953,14 +1849,10 @@
             const countEl = document.getElementById('modalProductCount');
             const listEl = document.getElementById('modalProductsList');
 
-            countEl.innerText = `${prods.length} ${prods.length === 1 ? 'item' : 'items'}`;
+            countEl.innerText = prods.length + " " + (prods.length === 1 ? 'item' : 'items');
 
             if (prods.length === 0) {
-                listEl.innerHTML = `
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
-                        This vendor hasn't listed individual products yet. You can still message them directly via WhatsApp below!
-                    </div>
-                `;
+                listEl.innerHTML = `<div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">This vendor hasn't listed individual products yet. You can still message them directly via WhatsApp below!</div>`;
                 return;
             }
 
@@ -1968,29 +1860,33 @@
                 const isSelected = idx === selectedProductIndex;
                 const inStock = p.inStock !== false;
                 const unitDisplay = (p.unit && p.unit !== 'Skip') ? p.unit : '';
+                const clickAttr = inStock ? `onclick="selectModalProduct(${idx})"` : '';
+                const cardStyle = !inStock
+                    ? 'bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed'
+                    : (isSelected ? 'bg-emerald-50/70 border-emerald-600 cursor-pointer shadow-sm' : 'bg-white border-slate-200 hover:border-emerald-300 cursor-pointer');
+                const stockBadge = !inStock ? `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-[10px] font-extrabold uppercase">Out of Stock</span>` : '';
+                const infoLine = p.info ? `<p class="text-xs text-slate-500 truncate mt-0.5">${p.info}</p>` : '';
+                const radioStyle = (isSelected && inStock) ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300';
+                const checkIcon = (isSelected && inStock) ? `<i data-lucide="check" class="w-3.5 h-3.5"></i>` : '';
 
-                return `
-                    <div onclick="${inStock ? `selectModalProduct(${idx})` : ''}" class="p-3 rounded-2xl border-2 transition-all flex items-center justify-between gap-3 ${!inStock ? 'bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed' : isSelected ? 'bg-emerald-50/70 border-emerald-600 cursor-pointer shadow-sm' : 'bg-white border-slate-200 hover:border-emerald-300 cursor-pointer'}">
-                        <div class="flex items-center gap-3 min-w-0 flex-1">
-                            <img src="${p.image || selectedBusiness.logo || DEFAULT_LOGO}" alt="${p.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0 bg-slate-100">
-                            <div class="min-w-0 flex-1">
-                                <div class="flex items-center gap-1.5 flex-wrap">
-                                    <h5 class="font-bold text-slate-900 text-sm truncate">${p.name}</h5>
-                                    ${!inStock ? `<span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-[10px] font-extrabold uppercase">Out of Stock</span>` : ''}
-                                </div>
-                                ${p.info ? `<p class="text-xs text-slate-500 truncate mt-0.5">${p.info}</p>` : ''}
-                                <p class="text-xs font-extrabold text-emerald-700 mt-1">
-                                    RM ${parseFloat(p.price || 0).toFixed(2)} <span class="font-medium text-slate-500">${unitDisplay}</span>
-                                </p>
+                return `<div ${clickAttr} class="p-3 rounded-2xl border-2 transition-all flex items-center justify-between gap-3 ${cardStyle}">
+                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                        <img src="${p.image || selectedBusiness.logo || DEFAULT_LOGO}" alt="${p.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0 bg-slate-100">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <h5 class="font-bold text-slate-900 text-sm truncate">${p.name}</h5>
+                                ${stockBadge}
                             </div>
-                        </div>
-                        <div class="flex-shrink-0 pr-1">
-                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected && inStock ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300'}">
-                                ${isSelected && inStock ? `<i data-lucide="check" class="w-3.5 h-3.5"></i>` : ''}
-                            </div>
+                            ${infoLine}
+                            <p class="text-xs font-extrabold text-emerald-700 mt-1">
+                                RM ${parseFloat(p.price || 0).toFixed(2)} <span class="font-medium text-slate-500">${unitDisplay}</span>
+                            </p>
                         </div>
                     </div>
-                `;
+                    <div class="flex-shrink-0 pr-1">
+                        <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${radioStyle}">${checkIcon}</div>
+                    </div>
+                </div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -2005,14 +1901,13 @@
             updateModalWhatsappLink();
         }
 
-        // Parse custom vendor WhatsApp template with clean numeric 6012... phone format
         function buildCustomWhatsappUrl(vendor, product, customerNotes) {
             const template = (vendor.whatsapp_template && vendor.whatsapp_template.trim() !== "")
                 ? vendor.whatsapp_template
                 : DEFAULT_WA_TEMPLATE;
 
             const prodName = product ? product.name : "General Inquiry";
-            const prodPrice = product ? `RM ${parseFloat(product.price || 0).toFixed(2)}` : "-";
+            const prodPrice = product ? ("RM " + parseFloat(product.price || 0).toFixed(2)) : "-";
             const prodUnit = (product && product.unit && product.unit !== 'Skip') ? product.unit : "";
             const notes = (customerNotes && customerNotes.trim() !== "") ? customerNotes.trim() : "-";
 
@@ -2026,7 +1921,7 @@
                 .trim();
 
             const cleanWaDigits = sanitizePhoneToWaDigits(vendor.phone);
-            return `https://wa.me/${cleanWaDigits}?text=${encodeURIComponent(parsedMessage)}`;
+            return "https://wa.me/" + cleanWaDigits + "?text=" + encodeURIComponent(parsedMessage);
         }
 
         function updateModalWhatsappLink() {
@@ -2044,9 +1939,9 @@
             const isProdInStock = !activeProd || activeProd.inStock !== false;
 
             if (activeProd) {
-                summaryEl.innerText = `${activeProd.name} • RM ${parseFloat(activeProd.price || 0).toFixed(2)}`;
+                summaryEl.innerText = activeProd.name + " • RM " + parseFloat(activeProd.price || 0).toFixed(2);
             } else {
-                summaryEl.innerText = `Direct Inquiry • ${b.name}`;
+                summaryEl.innerText = "Direct Inquiry • " + b.name;
             }
 
             if (isStoreAvailable && isProdInStock) {
@@ -2060,9 +1955,6 @@
             }
         }
 
-        // ============================================================================
-        // SIMPLIFIED ONBOARDING FLOW (BASIC PROFILE ONLY -> REDIRECT TO DASHBOARD)
-        // ============================================================================
         function openAuthModal(defaultTab = 'register') {
             switchAuthTab(defaultTab);
             const regPhoneEl = document.getElementById('regPhone');
@@ -2111,14 +2003,14 @@
 
             const createdVendor = normalizeVendorSchema({
                 id: Date.now(),
-                name,
-                category,
-                block,
+                name: name,
+                category: category,
+                block: block,
                 status: "Available",
-                schedule,
-                schedule_config: { days: selectedDays, openTime, closeTime },
-                phone,
-                pin,
+                schedule: schedule,
+                schedule_config: { days: selectedDays, openTime: openTime, closeTime: closeTime },
+                phone: phone,
+                pin: pin,
                 logo: logoImg,
                 poster: null,
                 products: [],
@@ -2128,7 +2020,7 @@
             try {
                 listings.unshift(createdVendor);
                 saveState();
-                await commitVendorsToGitHub(`Register vendor: ${createdVendor.name}`);
+                await commitVendorsToGitHub("Register vendor: " + createdVendor.name);
 
                 if (!session || session.role !== 'admin') {
                     session = { role: 'vendor', vendorId: createdVendor.id };
@@ -2159,7 +2051,6 @@
             const sanitizedPhone = sanitizePhoneToWaDigits(rawPhone);
             const pin = document.getElementById('loginPin').value.trim();
 
-            // 1. Check Seeded Admin Account (Supports 012345678 or auto-formatted +6012345678)
             if ((cleanDigits === ADMIN_ACCOUNT.phone || sanitizedPhone === ADMIN_ACCOUNT.sanitizedPhone) && pin === ADMIN_ACCOUNT.pin) {
                 session = { role: 'admin', vendorId: null };
                 saveState();
@@ -2171,7 +2062,6 @@
                 return;
             }
 
-            // 2. Check Registered Vendor Credentials
             const matched = listings.find(v => {
                 const vDigits = sanitizePhoneToWaDigits(v.phone);
                 return vDigits === sanitizedPhone && String(v.pin) === pin;
@@ -2197,9 +2087,6 @@
             showPage('home');
         }
 
-        // ============================================================================
-        // VENDOR DASHBOARD & MULTI-PRODUCT CRUD MANAGEMENT
-        // ============================================================================
         function openDashboard(vendorId, autoOpenNewProduct = false) {
             const targetId = vendorId || (session && session.vendorId);
             const vendor = listings.find(v => v.id === targetId);
@@ -2214,7 +2101,7 @@
 
             document.getElementById('dashVendorName').innerText = vendor.name;
             document.getElementById('dashVendorCategory').innerText = vendor.category;
-            document.getElementById('dashVendorBlock').innerText = `${vendor.block} • IIUM Pagoh`;
+            document.getElementById('dashVendorBlock').innerText = vendor.block + " • IIUM Pagoh";
             document.getElementById('dashVendorLogo').src = vendor.logo || DEFAULT_LOGO;
 
             const onboardBanner = document.getElementById('dashOnboardingBanner');
@@ -2267,13 +2154,11 @@
             const prods = vendor.products || [];
 
             if (prods.length === 0) {
-                container.innerHTML = `
-                    <div class="p-8 rounded-2xl border-2 border-dashed border-slate-200 text-center space-y-2">
-                        <i data-lucide="package-open" class="w-8 h-8 text-slate-400 mx-auto"></i>
-                        <p class="text-sm font-bold text-slate-700">No products or services listed yet</p>
-                        <p class="text-xs text-slate-400">Click "+ Add Product" above to add your first item.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="p-8 rounded-2xl border-2 border-dashed border-slate-200 text-center space-y-2">
+                    <i data-lucide="package-open" class="w-8 h-8 text-slate-400 mx-auto"></i>
+                    <p class="text-sm font-bold text-slate-700">No products or services listed yet</p>
+                    <p class="text-xs text-slate-400">Click "+ Add Product" above to add your first item.</p>
+                </div>`;
                 lucide.createIcons();
                 return;
             }
@@ -2281,38 +2166,33 @@
             container.innerHTML = prods.map((p) => {
                 const inStock = p.inStock !== false;
                 const unitLabel = (p.unit && p.unit !== 'Skip') ? p.unit : '';
+                const rowStyle = inStock ? 'border-slate-200 bg-white' : 'border-slate-200 bg-slate-50 opacity-75';
+                const badgeStyle = inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700';
+                const badgeText = inStock ? 'In Stock' : 'Out of Stock';
+                const infoHtml = p.info ? `<p class="text-[11px] text-slate-500 truncate mt-0.5">${p.info}</p>` : '';
+                const stockBtnStyle = inStock ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700';
+                const stockBtnLabel = inStock ? 'Mark Out of Stock' : 'Mark In Stock';
 
-                return `
-                    <div class="p-3.5 rounded-2xl border ${inStock ? 'border-slate-200 bg-white' : 'border-slate-200 bg-slate-50 opacity-75'} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <img src="${p.image || vendor.logo || DEFAULT_LOGO}" alt="${p.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0 bg-slate-100">
-                            <div class="min-w-0 flex-1">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <h4 class="font-bold text-slate-900 text-sm truncate">${p.name}</h4>
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold ${inStock ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'}">
-                                        ${inStock ? 'In Stock' : 'Out of Stock'}
-                                    </span>
-                                </div>
-                                <p class="text-xs font-extrabold text-emerald-700 mt-0.5">
-                                    RM ${parseFloat(p.price || 0).toFixed(2)} <span class="font-normal text-slate-500">${unitLabel}</span>
-                                </p>
-                                ${p.info ? `<p class="text-[11px] text-slate-500 truncate mt-0.5">${p.info}</p>` : ''}
+                return `<div class="p-3.5 rounded-2xl border ${rowStyle} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <img src="${p.image || vendor.logo || DEFAULT_LOGO}" alt="${p.name}" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0 bg-slate-100">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h4 class="font-bold text-slate-900 text-sm truncate">${p.name}</h4>
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold ${badgeStyle}">${badgeText}</span>
                             </div>
-                        </div>
-
-                        <div class="flex items-center justify-end gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-shrink-0">
-                            <button type="button" onclick="toggleProductStock('${p.id}')" class="touch-target px-3 rounded-xl text-xs font-bold border ${inStock ? 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'} transition-colors">
-                                ${inStock ? 'Mark Out of Stock' : 'Mark In Stock'}
-                            </button>
-                            <button type="button" onclick="openProductForm('${p.id}')" class="touch-target px-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-bold transition-colors" title="Edit Product">
-                                Edit
-                            </button>
-                            <button type="button" onclick="deleteProduct('${p.id}')" class="touch-target px-3 rounded-xl bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold transition-colors" title="Delete Product">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
+                            <p class="text-xs font-extrabold text-emerald-700 mt-0.5">
+                                RM ${parseFloat(p.price || 0).toFixed(2)} <span class="font-normal text-slate-500">${unitLabel}</span>
+                            </p>
+                            ${infoHtml}
                         </div>
                     </div>
-                `;
+                    <div class="flex items-center justify-end gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex-shrink-0">
+                        <button type="button" onclick="toggleProductStock('${p.id}')" class="touch-target px-3 rounded-xl text-xs font-bold border ${stockBtnStyle} transition-colors">${stockBtnLabel}</button>
+                        <button type="button" onclick="openProductForm('${p.id}')" class="touch-target px-3 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-bold transition-colors" title="Edit Product">Edit</button>
+                        <button type="button" onclick="deleteProduct('${p.id}')" class="touch-target px-3 rounded-xl bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold transition-colors" title="Delete Product"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`;
             }).join('');
             lucide.createIcons();
         }
@@ -2410,25 +2290,25 @@
                 if (idx >= 0) {
                     vendor.products[idx] = {
                         ...vendor.products[idx],
-                        name,
+                        name: name,
                         price: rawPrice,
                         unit: finalUnit,
-                        formattedPrice,
-                        info,
-                        image,
-                        inStock
+                        formattedPrice: formattedPrice,
+                        info: info,
+                        image: image,
+                        inStock: inStock
                     };
                 }
             } else {
                 vendor.products.push({
                     id: 'prod-' + Date.now(),
-                    name,
+                    name: name,
                     price: rawPrice,
                     unit: finalUnit,
-                    formattedPrice,
-                    info,
-                    image,
-                    inStock
+                    formattedPrice: formattedPrice,
+                    info: info,
+                    image: image,
+                    inStock: inStock
                 });
             }
 
@@ -2460,7 +2340,7 @@
             const vendor = listings.find(v => v.id === editingVendorId);
             if (!vendor || !vendor.products) return;
             const prod = vendor.products.find(p => p.id === productId);
-            if (!confirm(`Delete "${prod ? prod.name : 'this product'}" from your catalog?`)) return;
+            if (!confirm("Delete \"" + (prod ? prod.name : 'this product') + "\" from your catalog?")) return;
 
             vendor.products = vendor.products.filter(p => p.id !== productId);
             normalizeVendorSchema(vendor);
@@ -2469,9 +2349,6 @@
             renderAll();
         }
 
-        // ============================================================================
-        // WHATSAPP TEMPLATE HELPERS & PROFILE SETTINGS
-        // ============================================================================
         function insertTemplateVar(variableToken) {
             const textarea = document.getElementById('dashInputWaTemplate');
             if (!textarea) return;
@@ -2545,7 +2422,7 @@
             const openTime = document.getElementById('dashOpenTime').value || '08:00';
             const closeTime = document.getElementById('dashCloseTime').value || '22:00';
 
-            vendor.schedule_config = { days: selectedDays, openTime, closeTime };
+            vendor.schedule_config = { days: selectedDays, openTime: openTime, closeTime: closeTime };
             vendor.schedule = buildScheduleString(selectedDays, openTime, closeTime);
 
             normalizeVendorSchema(vendor);
@@ -2558,7 +2435,7 @@
         async function syncVendorUpdate(vendor) {
             saveState();
             try {
-                await commitVendorsToGitHub(`Update vendor: ${vendor.name}`);
+                await commitVendorsToGitHub("Update vendor: " + vendor.name);
             } catch (err) {
                 console.error("Cloud sync error:", err.message);
                 alert("Saved locally, but cloud sync failed: " + err.message);
@@ -2568,7 +2445,7 @@
         async function handleSelfDeleteAccount() {
             const vendor = listings.find(v => v.id === editingVendorId);
             if (!vendor) return;
-            if (!confirm(`Are you sure you want to permanently delete "${vendor.name}"? This action cannot be undone.`)) return;
+            if (!confirm("Are you sure you want to permanently delete \"" + vendor.name + "\"? This action cannot be undone.")) return;
 
             await deleteVendorById(vendor.id);
             if (session && session.role === 'vendor') {
@@ -2587,25 +2464,21 @@
             listings = listings.filter(v => v.id !== id);
             saveState();
             try {
-                await commitVendorsToGitHub(`Delete vendor: ${target ? target.name : id}`);
+                await commitVendorsToGitHub("Delete vendor: " + (target ? target.name : id));
             } catch (err) {
                 console.error("Cloud delete error:", err.message);
                 alert("Removed locally, but cloud sync failed: " + err.message);
             }
         }
 
-        // ============================================================================
-        // ADMIN USER, CONTACTS & BANNER MANAGEMENT PANEL
-        // ============================================================================
         function renderAdminPanel() {
             const tbody = document.getElementById('adminUsersTableBody');
             const badge = document.getElementById('adminTotalUsersBadge');
             const bannersList = document.getElementById('adminBannersList');
             const contactsGrid = document.getElementById('adminContactsGrid');
 
-            badge.innerText = `${listings.length} Account${listings.length === 1 ? '' : 's'}`;
+            badge.innerText = listings.length + " Account" + (listings.length === 1 ? '' : 's');
 
-            // Render Admin Contacts CRUD Cards
             if (contactsGrid) {
                 if (!Array.isArray(adminContacts) || adminContacts.length === 0) {
                     contactsGrid.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No official contacts added yet. Click "+ Add Contact" above.</p>`;
@@ -2613,55 +2486,47 @@
                     contactsGrid.innerHTML = adminContacts.map(c => {
                         const cleanWa = sanitizePhoneToWaDigits(c.phone);
                         const dispPhone = displayFormattedPhone(c.phone);
-                        return `
-                            <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between gap-3">
-                                <div class="space-y-1">
-                                    <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
-                                    <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
-                                    <p class="text-xs font-semibold text-slate-700">${dispPhone}</p>
-                                    ${c.email ? `<p class="text-xs text-slate-500 truncate">${c.email}</p>` : ''}
-                                </div>
-                                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/80">
-                                    <a href="https://wa.me/${cleanWa}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
-                                        <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Test WA
-                                    </a>
-                                    <div class="flex items-center gap-1.5">
-                                        <button type="button" onclick="openAdminContactForm('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-bold transition-colors">
-                                            Edit
-                                        </button>
-                                        <button type="button" onclick="deleteAdminContact('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold transition-colors">
-                                            Delete
-                                        </button>
-                                    </div>
+                        const emailHtml = c.email ? `<p class="text-xs text-slate-500 truncate">${c.email}</p>` : '';
+                        return `<div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 flex flex-col justify-between gap-3">
+                            <div class="space-y-1">
+                                <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${c.role}</span>
+                                <h4 class="font-bold text-slate-900 text-sm">${c.name}</h4>
+                                <p class="text-xs font-semibold text-slate-700">${dispPhone}</p>
+                                ${emailHtml}
+                            </div>
+                            <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/80">
+                                <a href="https://wa.me/${cleanWa}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-emerald-600 hover:underline flex items-center gap-1">
+                                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Test WA
+                                </a>
+                                <div class="flex items-center gap-1.5">
+                                    <button type="button" onclick="openAdminContactForm('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-bold transition-colors">Edit</button>
+                                    <button type="button" onclick="deleteAdminContact('${c.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold transition-colors">Delete</button>
                                 </div>
                             </div>
-                        `;
+                        </div>`;
                     }).join('');
                 }
             }
 
-            // Render Global Hero Banners
             const allBanners = getActiveBanners();
             if (allBanners.length === 0) {
                 bannersList.innerHTML = `<p class="text-xs text-slate-400 col-span-full">No active hero banners. Upload an Admin banner or have a user upload a poster.</p>`;
             } else {
-                bannersList.innerHTML = allBanners.map(b => `
-                    <div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 h-28 group">
+                bannersList.innerHTML = allBanners.map(b => {
+                    const vendorArg = b.vendorId ? b.vendorId : 'null';
+                    return `<div class="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 h-28 group">
                         <img src="${b.image}" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-slate-900/50 p-3 flex flex-col justify-between text-white">
                             <span class="text-[10px] font-bold uppercase bg-emerald-500 text-slate-950 px-2 py-0.5 rounded self-start">${b.badge}</span>
                             <div class="flex items-center justify-between gap-2">
                                 <span class="text-xs font-bold truncate">${b.title}</span>
-                                <button onclick="adminRemoveBanner('${b.id}', ${b.vendorId})" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold rounded-lg">
-                                    Remove
-                                </button>
+                                <button onclick="adminRemoveBanner('${b.id}', ${vendorArg})" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold rounded-lg">Remove</button>
                             </div>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`;
+                }).join('');
             }
 
-            // Render Registered Vendors Table
             if (listings.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">No user accounts registered yet.</td></tr>`;
                 lucide.createIcons();
@@ -2670,8 +2535,8 @@
 
             tbody.innerHTML = listings.map(user => {
                 const prodCount = (user.products || []).length;
-                return `
-                <tr class="hover:bg-slate-50/80">
+                const statusBadge = user.status === 'Available' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700';
+                return `<tr class="hover:bg-slate-50/80">
                     <td class="py-3.5 px-4">
                         <div class="flex items-center gap-3">
                             <img src="${user.logo || DEFAULT_LOGO}" class="w-9 h-9 rounded-xl object-cover border border-slate-200">
@@ -2694,20 +2559,14 @@
                         <span class="text-[11px] text-slate-400">${user.schedule}</span>
                     </td>
                     <td class="py-3.5 px-4 text-xs">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${user.status === 'Available' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
-                            ${user.status}
-                        </span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${statusBadge}">${user.status}</span>
                     </td>
                     <td class="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
-                        <button onclick="openDashboard(${user.id})" class="px-3 py-2 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 font-bold text-xs rounded-lg transition-colors">
-                            Edit Store
-                        </button>
-                        <button onclick="adminForceDeleteUser(${user.id})" class="px-3 py-2 bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold text-xs rounded-lg transition-colors">
-                            Delete
-                        </button>
+                        <button onclick="openDashboard(${user.id})" class="px-3 py-2 bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 font-bold text-xs rounded-lg transition-colors">Edit Store</button>
+                        <button onclick="adminForceDeleteUser(${user.id})" class="px-3 py-2 bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-600 font-bold text-xs rounded-lg transition-colors">Delete</button>
                     </td>
-                </tr>
-            `}).join('');
+                </tr>`;
+            }).join('');
             lucide.createIcons();
         }
 
@@ -2718,12 +2577,12 @@
             const compressed = await compressImageFile(file, 900);
             adminBanners.unshift({
                 id: 'adm-' + Date.now(),
-                title,
+                title: title,
                 image: compressed
             });
             saveState();
             try {
-                await commitVendorsToGitHub(`Add admin hero banner: ${title}`);
+                await commitVendorsToGitHub("Add admin hero banner: " + title);
             } catch (err) {
                 console.warn("Admin banner saved locally:", err.message);
             }
@@ -2741,7 +2600,7 @@
                 adminBanners = adminBanners.filter(b => b.id !== bannerId);
                 saveState();
                 try {
-                    await commitVendorsToGitHub(`Remove admin hero banner`);
+                    await commitVendorsToGitHub("Remove admin hero banner");
                 } catch (err) {
                     console.warn("Banner removed locally:", err.message);
                 }
@@ -2752,14 +2611,11 @@
         async function adminForceDeleteUser(id) {
             const target = listings.find(v => v.id === id);
             if (!target) return;
-            if (!confirm(`ADMIN ACTION: Force-delete account "${target.name}" (${displayFormattedPhone(target.phone)})?`)) return;
+            if (!confirm("ADMIN ACTION: Force-delete account \"" + target.name + "\" (" + displayFormattedPhone(target.phone) + ")?")) return;
             await deleteVendorById(id);
             renderAll();
         }
 
-        // ============================================================================
-        // ORDER HISTORY & MODAL HELPERS
-        // ============================================================================
         function recordHistory() {
             if (!selectedBusiness) return;
             const activeProd = (selectedBusiness.products || [])[selectedProductIndex];
@@ -2797,8 +2653,7 @@
             dot.classList.remove('hidden');
             container.innerHTML = recentHistory.map(item => {
                 const cleanWa = sanitizePhoneToWaDigits(item.phone);
-                return `
-                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-2">
+                return `<div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-2">
                     <div class="flex items-center gap-3 min-w-0">
                         <img src="${item.logo}" class="w-10 h-10 rounded-lg object-cover bg-white flex-shrink-0">
                         <div class="min-w-0">
@@ -2809,8 +2664,8 @@
                     <a href="https://wa.me/${cleanWa}" target="_blank" rel="noopener noreferrer" class="touch-target flex items-center justify-center bg-emerald-100 text-emerald-700 rounded-xl hover:bg-emerald-200 flex-shrink-0">
                         <i data-lucide="message-circle" class="w-4 h-4"></i>
                     </a>
-                </div>
-            `}).join('');
+                </div>`;
+            }).join('');
             lucide.createIcons();
         }
 
