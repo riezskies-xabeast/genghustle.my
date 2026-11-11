@@ -38,7 +38,7 @@
     "name": "express runner",
     "category": "Food & Bites",
     "block": "Block 6",
-    "status": "Available",
+    "status": "Paused / In Class",
     "schedule": "Mon, Wed, Fri, Sat, Sun • 06:00 - 08:30",
     "schedule_config": {
       "days": [
