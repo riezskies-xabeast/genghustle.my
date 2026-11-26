@@ -14,6 +14,7 @@
         html, body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f8fafc;
+            transition: background-color 300ms ease;
             overflow-x: hidden;
             width: 100%;
             -webkit-tap-highlight-color: transparent;
@@ -164,52 +165,52 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4">
-                    <button type="button" data-filter-cat="Food & Bites" class="p-3.5 sm:p-4 rounded-2xl bg-orange-50/90 border border-orange-200 hover:border-orange-400 hover:bg-orange-100/70 hover:shadow-lg hover:shadow-orange-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-orange-100 text-orange-600 ring-1 ring-orange-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Food & Bites" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Food &amp; Bites</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Meals, Snacks &amp; Drinks</p>
+                        <p class="text-[11px] text-slate-500 truncate">Meals, Snacks &amp; Drinks</p>
                     </button>
 
-                    <button type="button" data-filter-cat="Runners" class="p-3.5 sm:p-4 rounded-2xl bg-emerald-50/90 border border-emerald-200 hover:border-emerald-400 hover:bg-emerald-100/70 hover:shadow-lg hover:shadow-emerald-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-600 ring-1 ring-emerald-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Runners" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Runners</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Parcel &amp; Food pickup</p>
+                        <p class="text-[11px] text-slate-500 truncate">Parcel &amp; Food pickup</p>
                     </button>
 
-                    <button type="button" data-filter-cat="Transports" class="p-3.5 sm:p-4 rounded-2xl bg-blue-50/90 border border-blue-200 hover:border-blue-400 hover:bg-blue-100/70 hover:shadow-lg hover:shadow-blue-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-600 ring-1 ring-blue-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Transports" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Transports</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Carpool &amp; Rides</p>
+                        <p class="text-[11px] text-slate-500 truncate">Carpool &amp; Rides</p>
                     </button>
 
-                    <button type="button" data-filter-cat="Products" class="p-3.5 sm:p-4 rounded-2xl bg-purple-50/90 border border-purple-200 hover:border-purple-400 hover:bg-purple-100/70 hover:shadow-lg hover:shadow-purple-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-purple-100 text-purple-600 ring-1 ring-purple-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Products" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Products</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Arts, Accessories etc.</p>
+                        <p class="text-[11px] text-slate-500 truncate">Arts, Accessories etc.</p>
                     </button>
 
-                    <button type="button" data-filter-cat="Services" class="p-3.5 sm:p-4 rounded-2xl bg-teal-50/90 border border-teal-200 hover:border-teal-400 hover:bg-teal-100/70 hover:shadow-lg hover:shadow-teal-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-teal-100 text-teal-600 ring-1 ring-teal-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Services" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Services</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Printing, Laundry etc.</p>
+                        <p class="text-[11px] text-slate-500 truncate">Printing, Laundry etc.</p>
                     </button>
 
-                    <button type="button" data-filter-cat="Pre-Loved" class="p-3.5 sm:p-4 rounded-2xl bg-pink-50/90 border border-pink-200 hover:border-pink-400 hover:bg-pink-100/70 hover:shadow-lg hover:shadow-pink-500/10 group text-left transition-all active:scale-[0.98]">
-                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-pink-100 text-pink-600 ring-1 ring-pink-200/80 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
+                    <button type="button" data-filter-cat="Pre-Loved" class="p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-lg hover:shadow-emerald-500/5 group text-left transition-all active:scale-[0.98]">
+                        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center mb-2.5 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>
                         </div>
                         <h3 class="font-bold text-slate-900 text-sm">Pre-Loved</h3>
-                        <p class="text-[11px] text-slate-600 truncate">Secondhand Items</p>
+                        <p class="text-[11px] text-slate-500 truncate">Secondhand Items</p>
                     </button>
                 </div>
             </div>
@@ -1342,6 +1343,22 @@
                 }
             }
 
+            const CATEGORY_BG_COLORS = {
+                "All": "#f8fafc",
+                "Food & Bites": "#ffedd5",
+                "Runners": "#d1fae5",
+                "Transports": "#dbeafe",
+                "Products": "#f3e8ff",
+                "Services": "#ccfbf1",
+                "Pre-Loved": "#fce7f3"
+            };
+
+            function applyPageBackground(category = "All") {
+                const bg = CATEGORY_BG_COLORS[category] || CATEGORY_BG_COLORS["All"];
+                document.documentElement.style.backgroundColor = bg;
+                document.body.style.backgroundColor = bg;
+            }
+
             function showPage(pageId) {
                 if (pageId === "admin" && !isAdminSession()) {
                     showToast("Admin access required.", "error");
@@ -1359,6 +1376,7 @@
                     const el = document.getElementById(`page-${p}`);
                     if (el) el.classList.toggle("hidden", p !== pageId);
                 });
+                applyPageBackground(pageId === "listings" ? state.activeCategory : "All");
                 window.scrollTo({ top: 0, behavior: "smooth" });
                 refreshIcons();
             }
