@@ -4,7 +4,7 @@
     "name": "Fan Cleaning Service",
     "category": "Services",
     "block": "Block 3",
-    "status": "Available",
+    "status": "Paused / In Class",
     "schedule": "Mon, Fri, Sat, Sun • 08:00 - 22:00",
     "schedule_config": {
       "days": [
@@ -163,6 +163,6 @@
       }
     ],
     "adminBanners": [],
-    "updatedAt": "2026-11-27T08:27:17.857Z"
+    "updatedAt": "2026-11-27T08:27:29.517Z"
   }
 ]
