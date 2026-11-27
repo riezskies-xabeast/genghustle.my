@@ -77,7 +77,7 @@
     "name": "CASTELLAN 25/26 Merch",
     "category": "Products",
     "block": "Block 3",
-    "status": "Paused / In Class",
+    "status": "Available",
     "schedule": "Mon, Tue, Wed, Thu, Fri, Sat, Sun • 10:00 - 22:00",
     "schedule_config": {
       "days": [
@@ -204,6 +204,6 @@
       }
     ],
     "adminBanners": [],
-    "updatedAt": "2026-11-27T09:56:30.086Z"
+    "updatedAt": "2026-11-27T09:56:41.663Z"
   }
 ]
