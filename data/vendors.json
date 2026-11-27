@@ -123,7 +123,7 @@
     "name": "Toasty Bite",
     "category": "Food & Bites",
     "block": "Block 3",
-    "status": "Available",
+    "status": "Paused / In Class",
     "schedule": "Mon, Wed, Fri, Sat, Sun • 06:00 - 08:30",
     "schedule_config": {
       "days": [
@@ -204,6 +204,6 @@
       }
     ],
     "adminBanners": [],
-    "updatedAt": "2026-11-27T09:56:41.663Z"
+    "updatedAt": "2026-11-27T09:57:18.988Z"
   }
 ]
